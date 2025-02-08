@@ -155,9 +155,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Inspired by [CleanRL](https://github.com/vwxyzjn/cleanrl) and [RLCode](https://github.com/rlcode/reinforcement-learning)
 
+Certainly! Here's the updated **Contact** section with an added email address:
+
+---
+
 ## 🔗 Contact
 
-Created by: Yibin Liu
-Last Updated: 2025-02-08
+Created by: Yibin Liu  
 
+Email: [yibin.leon.liu@outlook.com](yibin.leon.liu@outlook.com)  
+
+Last Updated: 2025-02-08
 
