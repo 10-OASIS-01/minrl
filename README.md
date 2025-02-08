@@ -21,14 +21,14 @@ MinRL provides clean, minimal implementations of fundamental reinforcement learn
 minrl/
 ├── src/
 │   ├── environment/       
-│   │   └── grid_world.py  # Implementation of Core grid world logic, state transitions, rewards, and environment dynamics
+│   │   └── grid_world.py  # Core grid world logic, state transitions, rewards, and environment dynamics
 │   ├── agents/           
 │   │   ├── policy_evaluation.py  # Implements Bellman Expectation for policy evaluation
 │   │   ├── policy_optimization.py  # Policy iteration and value iteration implementations
 │   │   ├── q_learning.py  # Tabular Q-Learning algorithm
 │   │   └── deep_q_learning.py  # Deep Q-Learning (DQN) implementation using neural networks
 │   └── utils/             
-│       └── visualization.py  # Utilities for Visualizes state values, learned policies, and rewards over episodes
+│       └── visualization.py  # Visualizes state values, learned policies, and rewards over episodes
 ├── tests/  # Comprehensive test suite ensuring correct functionality
 ├── examples/              
 │   ├── basic_navigation.py  # Basic navigation example using a static GridWorld
