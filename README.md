@@ -89,7 +89,30 @@ pip install -e .
 ```
 ---
 
-### 2. **Run Basic Navigation Example**
+### **Basic Usage**
+
+Here’s how you can start using the basic functionality of the library:
+
+```python
+from minrl.environment import GridWorld
+from minrl.agents import DQNAgent
+
+# Create a 3x3 GridWorld environment
+env = GridWorld(size=3)
+
+# Initialize and train a DQN agent
+agent = DQNAgent(env)
+rewards = agent.train(episodes=1000)
+
+# Visualize the learned policy
+agent.visualize_policy()
+```
+
+This code sets up a simple **3x3 GridWorld**, trains a **DQN agent** for 1000 episodes, and then visualizes the learned policy.
+
+---
+
+### **Run Basic Navigation Example**
 
 The **basic_navigation.py** example demonstrates the agent navigating a static GridWorld environment. To run this example:
 
@@ -102,7 +125,7 @@ This will execute a basic navigation task where the agent tries to learn how to 
 
 ---
 
-### 3. **Run Experiments with All Implemented Algorithms**
+### **Run Experiments with All Implemented Algorithms**
 
 To see how the different RL algorithms (like Q-learning, DQN, etc.) perform on the same environment, you can run **run_experiments.py**. This will execute a full set of experiments and compare the results.
 
