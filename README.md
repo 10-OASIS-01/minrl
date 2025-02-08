@@ -20,21 +20,20 @@ MinRL provides clean, minimal implementations of fundamental reinforcement learn
 ```
 minrl/
 ├── src/
-│   ├── environment/       # Implementation of the customizable GridWorld environment
-│   │   └── grid_world.py # Core grid world logic, state transitions, rewards, and environment dynamics
-│   ├── agents/            # Reinforcement learning algorithms
+│   ├── environment/       
+│   │   └── grid_world.py           # Implementation of Core grid world logic, state transitions, rewards, and environment dynamics
+│   ├── agents/           
 │   │   ├── policy_evaluation.py    # Implements Bellman Expectation for policy evaluation
 │   │   ├── policy_optimization.py  # Policy iteration and value iteration implementations
-│   │   ├── q_learning.py          # Tabular Q-Learning algorithm
-│   │   └── deep_q_learning.py     # Deep Q-Learning (DQN) implementation using neural networks
-│   └── utils/             # Utilities for visualization, plotting, and general helper functions
-│       └── visualization.py      # Visualizes state values, learned policies, and rewards over episodes
-├── tests/                 # Comprehensive test suite ensuring correct functionality
-├── examples/              # Usage examples showcasing different scenarios
-│   ├── __init__.py        # Initializes the examples module
-│   ├── basic_navigation.py  # Basic navigation example using a static GridWorld
-│   └── run_experiments.py   # Runs experiments with all implemented RL algorithms
-└── docs/                  # Implementation Guide for Beginners
+│   │   ├── q_learning.py           # Tabular Q-Learning algorithm
+│   │   └── deep_q_learning.py      # Deep Q-Learning (DQN) implementation using neural networks
+│   └── utils/             
+│       └── visualization.py        # Utilities for Visualizes state values, learned policies, and rewards over episodes
+├── tests/                          # Comprehensive test suite ensuring correct functionality
+├── examples/              
+│   ├── basic_navigation.py         # Basic navigation example using a static GridWorld
+│   └── run_experiments.py          # Runs experiments with all implemented RL algorithms
+└── docs/                           # Implementation Guide for Beginners
 
 ```
 
