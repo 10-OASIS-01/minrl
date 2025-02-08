@@ -86,7 +86,6 @@ source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 # Install the package
 pip install -e .
 ```
----
 
 ### **Basic Usage**
 
@@ -109,7 +108,6 @@ agent.visualize_policy()
 
 This code sets up a simple **3x3 GridWorld**, trains a **DQN agent** for 1000 episodes, and then visualizes the learned policy.
 
----
 
 ### **Run Basic Navigation Example**
 
@@ -122,7 +120,6 @@ python -m minrl.examples.basic_navigation
 
 This will execute a basic navigation task where the agent tries to learn how to move in the 3x3 GridWorld. It will show how to set up the environment and train a simple agent.
 
----
 
 ### **Run Experiments with All Implemented Algorithms**
 
@@ -156,7 +153,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Certainly! Here's the updated **Contact** section with an added email address:
 
----
 
 ## 🔗 Contact
 
