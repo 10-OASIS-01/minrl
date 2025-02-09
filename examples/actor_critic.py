@@ -24,7 +24,7 @@ def run_actor_critic_demo():
     np.random.seed(42)
 
     # Create environment with interesting terminal states
-    env = GridWorld(size=5)
+    env = GridWorld(size=9)
 
     # Set terminal states that don't conflict with starting position (2,2)
     goal_state = env._pos_to_state((0, 4))  # Top-right corner

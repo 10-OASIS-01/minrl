@@ -83,7 +83,7 @@ def run_monte_carlo_example():
     np.random.seed(42)
 
     # Create environment and evaluator
-    env = GridWorld(size=5)
+    env = GridWorld(size=9)
     evaluator = MonteCarloEvaluator(env, gamma=0.99)
 
     # Create policies to evaluate

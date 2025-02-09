@@ -30,7 +30,7 @@ def run_mcts_example():
     np.random.seed(42)
 
     # Create environment and agent
-    env = GridWorld(size=5)
+    env = GridWorld(size=9)
     agent = MCTSAgent(
         env,
         num_simulations=100,
@@ -42,7 +42,7 @@ def run_mcts_example():
     viz = Visualizer()
 
     # Run episodes and collect statistics
-    num_episodes = 100
+    num_episodes = 50
     episode_rewards = []
     episode_lengths = []
     policies = {}
