@@ -17,7 +17,7 @@ from .agents import (
     DQNetwork,
     MonteCarloEvaluator,
     MCTSAgent,
-    # PPOAgent,
+    PPOAgent,
     ActorCriticAgent
 )
 from .utils import Visualizer
@@ -38,7 +38,7 @@ __all__ = [
     'DQNetwork',
     'MonteCarloEvaluator',
     'MCTSAgent',
-    # 'PPOAgent',
+    'PPOAgent',
     'ActorCriticAgent',
     # Utils
     'Visualizer',

@@ -296,48 +296,80 @@ class Visualizer:
 
     @staticmethod
     def visualize_episode_trajectory(env: 'GridWorld',
-                                   episode_data: List[Tuple[int, int, float]],
-                                   title: str = "Episode Trajectory") -> plt.Figure:
+                                     episode_data: List[Tuple[int, int, float]],
+                                     title: str = "Episode Trajectory") -> plt.Figure:
         """
         Visualize a complete episode trajectory with actions and rewards.
-        
+
         Args:
             env: The GridWorld environment
             episode_data: List of (state, action, reward) tuples
             title: Plot title
         """
         fig, ax = plt.subplots(figsize=(8, 8))
-        
-        # Plot grid
+
+        # Plot grid lines
+        ax.grid(True, which='major', linestyle='-', alpha=0.5)
+
+        # Plot grid cells
         for i in range(env.size):
             for j in range(env.size):
-                ax.add_patch(plt.Rectangle((j, i), 1, 1, fill=False))
-        
+                ax.add_patch(plt.Rectangle((j - 0.5, i - 0.5),
+                                           1, 1,
+                                           fill=False,
+                                           color='black',
+                                           alpha=0.2))
+
         # Plot terminal states
         for state, reward in env.terminal_states.items():
             pos = env._state_to_pos(state)
             color = 'green' if reward > 0 else 'red'
-            ax.add_patch(plt.Rectangle((pos[1], pos[0]), 1, 1, 
-                                     alpha=0.3, color=color))
-        
+            ax.add_patch(plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5),
+                                       1, 1,
+                                       alpha=0.3,
+                                       color=color))
+
         # Plot trajectory
         for i in range(len(episode_data) - 1):
             state, action, reward = episode_data[i]
             next_state = episode_data[i + 1][0]
-            
+
             current_pos = env._state_to_pos(state)
             next_pos = env._state_to_pos(next_state)
-            
+
+            # Plot current state point
+            ax.plot(current_pos[1], current_pos[0], 'bo', markersize=8, alpha=0.6)
+
+            # Calculate arrow positions
+            start_x = current_pos[1]
+            start_y = current_pos[0]
+            dx = next_pos[1] - current_pos[1]
+            dy = next_pos[0] - current_pos[0]
+
             # Plot arrow
-            ax.arrow(current_pos[1] + 0.5, current_pos[0] + 0.5,
-                    next_pos[1] - current_pos[1],
-                    next_pos[0] - current_pos[0],
-                    head_width=0.1, head_length=0.1,
-                    fc='blue', ec='blue', alpha=0.5)
-        
-        ax.set_title(title)
-        ax.grid(True)
+            ax.arrow(start_x, start_y,
+                     dx, dy,
+                     head_width=0.15,
+                     head_length=0.15,
+                     fc='blue',
+                     ec='blue',
+                     alpha=0.5,
+                     length_includes_head=True)
+
+        # Plot final state point if there are any episodes
+        if episode_data:
+            final_state = episode_data[-1][0]
+            final_pos = env._state_to_pos(final_state)
+            ax.plot(final_pos[1], final_pos[0], 'bo', markersize=8, alpha=0.6)
+
+        # Set proper axis limits and direction
         ax.set_xlim(-0.5, env.size - 0.5)
-        ax.set_ylim(env.size - 0.5, -0.5)
-        
+        ax.set_ylim(env.size - 0.5, -0.5)  # Reverse y-axis to match grid coordinates
+
+        # Set ticks at grid cell centers
+        ax.set_xticks(range(env.size))
+        ax.set_yticks(range(env.size))
+
+        ax.set_title(title)
+
         return fig
