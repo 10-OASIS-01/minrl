@@ -10,6 +10,7 @@ from .policy_evaluation import PolicyEvaluator
 from .policy_optimization import PolicyOptimizer
 from .q_learning import QLearningAgent
 from .deep_q_learning import DQNetwork, DQNAgent
+from .monte_carlo import MonteCarloEvaluator
 
 __all__ = [
     'PolicyEvaluator',
@@ -17,4 +18,5 @@ __all__ = [
     'QLearningAgent',
     'DQNetwork',
     'DQNAgent',
+    'MonteCarloEvaluator',
 ]
