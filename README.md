@@ -8,6 +8,7 @@ MinRL provides clean, minimal implementations of fundamental reinforcement learn
 - **Clean Implementation** of core RL algorithms:
   - Policy Evaluation (Bellman Expectation)
   - Monte Carlo Methods (First-visit and Every-visit)
+  - Monte Carlo Tree Search (MCTS)
   - Policy Iteration & Value Iteration
   - Tabular Q-Learning
   - Deep Q-Learning (DQN)
@@ -27,6 +28,7 @@ minrl/
 │   ├── agents/           
 │   │   ├── policy_evaluation.py  # Implements Bellman Expectation for policy evaluation
 │   │   ├── monte_carlo.py  # Monte Carlo methods for policy evaluation
+│   │   ├── mcts.py  # Monte Carlo Tree Search implementation
 │   │   ├── policy_optimization.py  # Policy iteration and value iteration implementations
 │   │   ├── q_learning.py  # Tabular Q-Learning algorithm
 │   │   ├── deep_q_learning.py  # Deep Q-Learning (DQN) implementation using neural networks
@@ -38,11 +40,11 @@ minrl/
 ├── examples/              
 │   ├── basic_navigation.py  # Basic navigation example using a static GridWorld
 │   ├── run_experiments.py  # Runs experiments with all implemented RL algorithms
+│   ├── mcts_example.py  # Monte Carlo Tree Search example
 │   ├── actor_critic_example.py  # Actor-Critic implementation example
 │   └── ppo_example.py  # PPO implementation example
 └── docs/  # Implementation Guide for Beginners
 ```
-
 ## 🎓 Implemented Algorithms
 
 1. **Policy Evaluation**
@@ -56,29 +58,37 @@ minrl/
    - Episode-based learning
    - Model-free approach
 
-3. **Policy/Value Iteration**
+3. **Monte Carlo Tree Search (MCTS)**
+   - UCT (Upper Confidence Bound for Trees) selection
+   - Tree node expansion and management
+   - Random rollout simulations
+   - Value backpropagation
+   - Configurable exploration parameters
+   - Optimal policy extraction
+
+4. **Policy/Value Iteration**
    - Value iteration with Bellman optimality
    - Policy iteration (evaluation + improvement)
    - Optimal policy extraction
 
-4. **Q-Learning**
+5. **Q-Learning**
    - Tabular state-action value learning
    - ε-greedy exploration
    - Hyperparameter tuning support
 
-5. **Deep Q-Learning (DQN)**
+6. **Deep Q-Learning (DQN)**
    - Neural network function approximation
    - Experience replay memory
    - Target network implementation
    - PyTorch backend
 
-6. **Actor-Critic**
+7. **Actor-Critic**
    - Separate actor and critic networks
    - Policy gradient with baseline
    - Value function approximation
    - Stable policy updates
 
-7. **Proximal Policy Optimization (PPO)**
+8. **Proximal Policy Optimization (PPO)**
    - Clipped surrogate objective
    - Combined actor-critic architecture
    - Advantage estimation
