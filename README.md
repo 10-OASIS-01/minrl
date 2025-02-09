@@ -163,13 +163,62 @@ python -m minrl.examples.basic_navigation
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! MinRL aims to be an educational and clean implementation of RL algorithms. Before submitting your contribution, please consider the following guidelines:
 
+### Getting Started
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+### Priority Areas for Contribution
+
+#### 1. Classic RL Algorithm Implementations
+- **Model-Based Methods**
+  - Dyna-Q
+  - Prioritized Sweeping
+  - PILCO (Probabilistic Inference for Learning Control)
+- **Multi-Agent RL**
+  - Independent Q-Learning
+  - MADDPG (Multi-Agent DDPG)
+- **Hierarchical RL**
+  - Options Framework
+  - MAXQ
+
+#### 2. Environment Enhancements
+- Adding support for partially observable states (POMDP)
+- Implementing more complex reward structures
+  - Sparse rewards
+  - Multi-objective rewards
+- Adding support for continuous action spaces
+- Implementing dynamic obstacles
+
+#### 3. Project Structure Improvements
+- Improving code modularity and reusability
+- Enhancing documentation with theory explanations
+- Streamlining configuration management
+- Adding new examples and tutorials
+- Implementing logging and experiment tracking
+
+#### 4. Visualization Enhancements
+
+### Contribution Guidelines
+1. Follow the existing code style and project structure
+2. Add comprehensive tests for new features
+3. Update documentation accordingly
+4. Ensure all tests pass before submitting PR
+5. Include example usage in docstrings
+6. Add relevant citations for implemented algorithms
+
+### Code Quality Requirements
+- Maintain clean, readable code
+- Include type hints
+- Follow PEP 8 guidelines
+- Achieve 100% test coverage for new code
+- Add detailed docstrings
+
+For major changes, please open an issue first to discuss what you would like to change. This ensures your time is well spent and your contribution aligns with the project's goals.
 
 ## ✨ Acknowledgments
 
