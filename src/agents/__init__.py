@@ -1,9 +1,12 @@
 """
 Agents Module
 Created by: 10-OASIS-01
-Date: 2025-02-08 10:40:01 UTC
+Date: 2025-02-09 06:59:44 UTC
 
-Contains implementations of various reinforcement learning agents.
+Contains implementations of various reinforcement learning agents:
+- Policy-based methods (Policy Evaluation and Optimization)
+- Value-based methods (Q-Learning, Deep Q-Network)
+- Monte Carlo methods (MC Evaluation, MCTS)
 """
 
 from .policy_evaluation import PolicyEvaluator
@@ -14,11 +17,14 @@ from .monte_carlo import MonteCarloEvaluator
 from .mcts import MCTSAgent
 
 __all__ = [
+    # Policy-based methods
     'PolicyEvaluator',
     'PolicyOptimizer',
+    # Value-based methods
     'QLearningAgent',
     'DQNetwork',
     'DQNAgent',
+    # Monte Carlo methods
     'MonteCarloEvaluator',
     'MCTSAgent',
 ]
