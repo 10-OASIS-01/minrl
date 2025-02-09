@@ -1,7 +1,7 @@
 """
 Actor-Critic Example
 Created by: 10-OASIS-01
-Date: 2025-02-09 04:56:06 UTC
+Date: 2025-02-09 06:15:52 UTC
 
 Demonstrates the usage of the Actor-Critic algorithm in the GridWorld environment.
 """
@@ -16,7 +16,6 @@ from src.utils.visualization import Visualizer
 
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
 
 def run_actor_critic_demo():
     """Run a demonstration of the Actor-Critic algorithm"""
@@ -24,49 +23,67 @@ def run_actor_critic_demo():
     torch.manual_seed(42)
     np.random.seed(42)
     
-    # Create environment and agent
-    env = GridWorld(size=4)
+    # Create environment with interesting terminal states
+    env = GridWorld(size=5)
+    env.set_terminal_state((0, 4), 1.0)  # Goal state with positive reward
+    env.set_terminal_state((2, 2), -1.0)  # Trap state with negative reward
+    
+    # Create agent
     agent = ActorCriticAgent(env)
     
     # Train the agent
     print("Training Actor-Critic agent...")
     rewards, lengths = agent.train(n_episodes=1000)
     
-    # Plot training results
-    plt.figure(figsize=(10, 5))
-    plt.subplot(1, 2, 1)
-    plt.plot(rewards)
-    plt.title('Episode Rewards')
-    plt.xlabel('Episode')
-    plt.ylabel('Total Reward')
+    # Plot training results using the Visualizer
+    training_fig = Visualizer.plot_training_results(
+        rewards=rewards,
+        lengths=lengths,
+        actor_losses=agent.actor_losses,
+        critic_losses=agent.critic_losses,
+        title='Actor-Critic Training Progress'
+    )
+    training_fig.show()
     
-    plt.subplot(1, 2, 2)
-    plt.plot(lengths)
-    plt.title('Episode Lengths')
-    plt.xlabel('Episode')
-    plt.ylabel('Steps')
-    
-    plt.tight_layout()
-    plt.show()
-    
-    # Display learned policy
+    # Get and display the learned policy
     policy = agent.get_optimal_policy()
-    Visualizer.plot_policy(policy, env.size, "Actor-Critic Learned Policy")
+    policy_fig = Visualizer.plot_policy(
+        policy, 
+        env.size, 
+        "Actor-Critic Learned Policy"
+    )
+    policy_fig.show()
     
-    # Run an episode with the learned policy
-    print("\nRunning episode with learned policy...")
+    # Run and visualize a test episode
+    print("\nRunning test episode with learned policy...")
     state = env.reset()
-    env.render()
-    
+    states, actions, rewards = [state], [], []
     done = False
     total_reward = 0
+    
     while not done:
         action, _ = agent.select_action(state)
-        state, reward, done, _ = env.step(action)
+        next_state, reward, done, _ = env.step(action)
+        
+        states.append(next_state)
+        actions.append(action)
+        rewards.append(reward)
         total_reward += reward
-        env.render()
+        state = next_state
     
-    print(f"Episode finished with total reward: {total_reward}")
+    # Visualize the test episode
+    episode_fig = Visualizer.visualize_episode(
+        env,
+        states,
+        actions,
+        rewards,
+        "Test Episode Trajectory"
+    )
+    episode_fig.show()
+    
+    print(f"Test episode finished with total reward: {total_reward}")
+    
+    return agent, policy, total_reward
 
 if __name__ == "__main__":
-    run_actor_critic_demo()
+    agent, policy, final_reward = run_actor_critic_demo()
