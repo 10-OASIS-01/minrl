@@ -15,7 +15,7 @@ from .q_learning import QLearningAgent
 from .deep_q_learning import DQNetwork, DQNAgent
 from .monte_carlo import MonteCarloEvaluator
 from .mcts import MCTSAgent
-from .ppo import PPOAgent
+# from .ppo import PPOAgent
 from .actor_critic import ActorCriticAgent
 
 __all__ = [
@@ -30,6 +30,6 @@ __all__ = [
     'MonteCarloEvaluator',
     'MCTSAgent',
     # Actor-Critic methods
-    'PPOAgent',
+    # 'PPOAgent',
     'ActorCriticAgent',
 ]

@@ -22,15 +22,16 @@ def run_actor_critic_demo():
     # Set random seeds for reproducibility
     torch.manual_seed(42)
     np.random.seed(42)
-    
+
     # Create environment with interesting terminal states
     env = GridWorld(size=5)
 
-    # Convert coordinate tuples to state indices for terminal states
-    goal_state = env._pos_to_state((0, 4))  # Convert goal position to state index
-    trap_state = env._pos_to_state((2, 2))  # Convert trap position to state index
+    # Set terminal states that don't conflict with starting position (2,2)
+    goal_state = env._pos_to_state((0, 4))  # Top-right corner
+    trap_state = env._pos_to_state((4, 0))  # Bottom-left corner
 
-    # Set terminal states using the terminal_states dictionary
+    # Clear default terminal states and set new ones
+    env.terminal_states.clear()  # Clear default terminal states
     env.terminal_states[goal_state] = 1.0  # Goal state with positive reward
     env.terminal_states[trap_state] = -1.0  # Trap state with negative reward
 
