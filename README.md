@@ -174,23 +174,14 @@ Contributions are welcome! MinRL aims to be an educational and clean implementat
 
 ### Priority Areas for Contribution
 
-#### 1. Classic RL Algorithm Implementations
-- **Model-Based Methods**
-  - Dyna-Q
-  - Prioritized Sweeping
-  - PILCO (Probabilistic Inference for Learning Control)
-- **Multi-Agent RL**
-  - Independent Q-Learning
-  - MADDPG (Multi-Agent DDPG)
-- **Hierarchical RL**
-  - Options Framework
-  - MAXQ
+#### 1. New RL Algorithm Implementations  
+- **Model-Based Methods**: Dyna-Q, Prioritized Sweeping, PILCO (Probabilistic Inference for Learning Control)
+- **Multi-Agent RL**: Independent Q-Learning, MADDPG (Multi-Agent DDPG)
+- **Hierarchical RL**:Options Framework, MAXQ
 
 #### 2. Environment Enhancements
 - Adding support for partially observable states (POMDP)
-- Implementing more complex reward structures
-  - Sparse rewards
-  - Multi-objective rewards
+- Implementing more complex reward structures: Sparse rewards and Multi-objective rewards
 - Adding support for continuous action spaces
 - Implementing dynamic obstacles
 
