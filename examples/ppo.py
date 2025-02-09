@@ -1,7 +1,7 @@
 """
 PPO Example
 Created by: 10-OASIS-01
-Date: 2025-02-09 04:58:42 UTC
+Date: 2025-02-09 06:18:57 UTC
 
 Demonstrates the usage of the PPO algorithm in the GridWorld environment.
 """
@@ -16,67 +16,101 @@ from src.utils.visualization import Visualizer
 
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
+from typing import List, Tuple
+
+def create_test_environment() -> GridWorld:
+    """Create a test environment with interesting terminal states"""
+    env = GridWorld(size=5)
+    env.set_terminal_state((0, 4), 1.0)   # Goal state with positive reward
+    env.set_terminal_state((2, 2), -1.0)  # Trap state with negative reward
+    return env
+
+def run_test_episode(agent: PPOAgent, env: GridWorld) -> Tuple[float, List[Tuple[int, int, float]]]:
+    """
+    Run a test episode with the trained agent.
+    
+    Returns:
+        Tuple containing total reward and episode data
+    """
+    state = env.reset()
+    episode_data = []
+    total_reward = 0
+    done = False
+    
+    while not done:
+        action, _, _ = agent.select_action(state)
+        next_state, reward, done, _ = env.step(action)
+        
+        episode_data.append((state, action, reward))
+        total_reward += reward
+        state = next_state
+    
+    # Add final state
+    episode_data.append((state, None, None))
+    return total_reward, episode_data
 
 def run_ppo_demo():
-    """Run a demonstration of the PPO algorithm"""
+    """Run a comprehensive demonstration of the PPO algorithm"""
     # Set random seeds for reproducibility
     torch.manual_seed(42)
     np.random.seed(42)
     
     # Create environment and agent
-    env = GridWorld(size=4)
-    agent = PPOAgent(env)
+    env = create_test_environment()
+    agent = PPOAgent(
+        env,
+        learning_rate=0.0003,
+        gamma=0.99,
+        clip_ratio=0.2,
+        value_coef=0.5,
+        entropy_coef=0.01
+    )
     
     # Train the agent
     print("Training PPO agent...")
     rewards, lengths = agent.train(n_episodes=1000)
     
-    # Plot training results
-    plt.figure(figsize=(15, 5))
+    # Visualize training results
+    training_fig = Visualizer.plot_ppo_training_results(
+        rewards=rewards,
+        lengths=lengths,
+        policy_losses=agent.policy_losses,
+        value_losses=agent.value_losses,
+        entropy_losses=agent.entropy_losses,
+        title="PPO Training Progress"
+    )
+    training_fig.show()
     
-    plt.subplot(1, 3, 1)
-    plt.plot(rewards)
-    plt.title('Episode Rewards')
-    plt.xlabel('Episode')
-    plt.ylabel('Total Reward')
-    
-    plt.subplot(1, 3, 2)
-    plt.plot(lengths)
-    plt.title('Episode Lengths')
-    plt.xlabel('Episode')
-    plt.ylabel('Steps')
-    
-    plt.subplot(1, 3, 3)
-    plt.plot(agent.policy_losses, label='Policy Loss')
-    plt.plot(agent.value_losses, label='Value Loss')
-    plt.plot(agent.entropy_losses, label='Entropy Loss')
-    plt.title('Training Losses')
-    plt.xlabel('Update')
-    plt.ylabel('Loss')
-    plt.legend()
-    
-    plt.tight_layout()
-    plt.show()
-    
-    # Display learned policy
+    # Get and visualize the learned policy
     policy = agent.get_optimal_policy()
-    Visualizer.plot_policy(policy, env.size, "PPO Learned Policy")
+    policy_fig = Visualizer.plot_policy(
+        policy,
+        env.size,
+        "PPO Learned Policy"
+    )
+    policy_fig.show()
     
-    # Run an episode with the learned policy
-    print("\nRunning episode with learned policy...")
-    state = env.reset()
-    env.render()
+    # Run and visualize a test episode
+    print("\nRunning test episode with learned policy...")
+    test_reward, episode_data = run_test_episode(agent, env)
     
-    done = False
-    total_reward = 0
-    while not done:
-        action, _, _ = agent.select_action(state)
-        state, reward, done, _ = env.step(action)
-        total_reward += reward
-        env.render()
+    trajectory_fig = Visualizer.visualize_episode_trajectory(
+        env,
+        episode_data,
+        f"PPO Test Episode (Reward: {test_reward:.2f})"
+    )
+    trajectory_fig.show()
     
-    print(f"Episode finished with total reward: {total_reward}")
+    print(f"Test episode finished with total reward: {test_reward}")
+    
+    return {
+        'agent': agent,
+        'final_policy': policy,
+        'training_rewards': rewards,
+        'training_lengths': lengths,
+        'test_reward': test_reward,
+        'test_trajectory': episode_data
+    }
 
 if __name__ == "__main__":
-    run_ppo_demo()
+    results = run_ppo_demo()
