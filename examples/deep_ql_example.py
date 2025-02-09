@@ -1,7 +1,6 @@
 """
 Basic navigation example using static GridWorld
 Created by: 10-OASIS-01
-Date: 2025-02-08 10:38:23 UTC
 """
 
 import sys

@@ -1,8 +1,6 @@
 """
 PPO Algorithm Example
 Created by: 10-OASIS-01
-Date: 2025-02-09 08:01:41 UTC
-
 Demonstrates the usage of the PPO algorithm in the GridWorld environment.
 """
 

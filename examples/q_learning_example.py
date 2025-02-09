@@ -1,25 +1,27 @@
+"""
+Q-Learning Algorithm Example
+Created by: 10-OASIS-01
+Demonstrates the use of Q-Learning in a GridWorld environment.
+"""
+
 import numpy as np
 from src.environment import GridWorld
 from src.agents import QLearningAgent
 from src.utils.visualization import Visualizer
 from src.agents import PolicyOptimizer  # Added missing import
+import matplotlib.pyplot as plt
 
 
 def run_q_learning_example():
-    """
-    Demonstrates the use of Q-Learning in a GridWorld environment.
-    """
-    # Create the same environment as in the Value Iteration example for comparison
+    # Create environment with new parameters
     env = GridWorld(size=5)
-    env.terminal_states[(0, 4)] = 1.0  # Goal state with positive reward
-    env.terminal_states[(2, 2)] = -1.0  # Trap state with negative reward
 
-    # Create Q-Learning agent
+    # Create Q-Learning agent with optimized parameters
     agent = QLearningAgent(
         env,
         learning_rate=0.1,
         gamma=0.99,
-        epsilon=1.0,  # Start with full exploration
+        epsilon=1.0,
         epsilon_decay=0.995,
         min_epsilon=0.01
     )
@@ -32,39 +34,36 @@ def run_q_learning_example():
         max_steps=100
     )
 
-    # Visualize training progress using the Visualizer class
-    training_fig = Visualizer.plot_training_results(
+    # Visualize results
+    viz = Visualizer()
+
+    # Plot training progress
+    viz.plot_training_results(
         rewards=rewards,
         lengths=lengths,
         title='Q-Learning Training Progress'
     )
-    training_fig.show()
+    plt.show()
 
-    # Print Q-values using the built-in method
+    # Print final Q-values
     print("\nFinal Q-values for each state:")
     agent.print_q_values()
 
-    # Get optimal policy
+    # Get and visualize optimal policy
     optimal_policy = agent.get_optimal_policy()
-
-    # Visualize the learned policy using the Visualizer class
-    policy_fig = Visualizer.plot_policy(
+    viz.plot_policy(
         optimal_policy,
         env.size,
         title='Learned Policy from Q-Learning'
     )
-    policy_fig.show()
+    plt.show()
 
     return agent, optimal_policy
 
 
 def compare_algorithms():
-    """
-    Compare Value Iteration and Q-Learning approaches with visualizations.
-    """
+    """Compare Value Iteration and Q-Learning approaches."""
     env = GridWorld(size=5)
-    env.terminal_states[(0, 4)] = 1.0
-    env.terminal_states[(2, 2)] = -1.0
 
     # Get Value Iteration policy
     vi_optimizer = PolicyOptimizer(env)
@@ -75,28 +74,17 @@ def compare_algorithms():
     ql_agent.train(n_episodes=1000)
     ql_policy = ql_agent.get_optimal_policy()
 
-    # Visualize both policies side by side
-    vi_fig = Visualizer.plot_policy(
-        vi_policy,
-        env.size,
-        title='Value Iteration Policy'
-    )
-    vi_fig.show()
+    # Visualize results
+    viz = Visualizer()
 
-    ql_fig = Visualizer.plot_policy(
-        ql_policy,
-        env.size,
-        title='Q-Learning Policy'
-    )
-    ql_fig.show()
+    viz.plot_policy(vi_policy, env.size, 'Value Iteration Policy')
+    plt.show()
 
-    # Visualize value function for Value Iteration
-    value_fig = Visualizer.plot_value_function(
-        vi_values,
-        env.size,
-        title='Value Function from Value Iteration'
-    )
-    value_fig.show()
+    viz.plot_policy(ql_policy, env.size, 'Q-Learning Policy')
+    plt.show()
+
+    viz.plot_value_function(vi_values, env.size, 'Value Function from Value Iteration')
+    plt.show()
 
 
 if __name__ == "__main__":

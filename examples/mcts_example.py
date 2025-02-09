@@ -1,8 +1,6 @@
 """
 MCTS Example
 Created by: 10-OASIS-01
-Date: 2025-02-09
-
 Demonstrates Monte Carlo Tree Search in the GridWorld environment.
 """
 

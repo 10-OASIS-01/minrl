@@ -1,11 +1,3 @@
-"""
-Monte Carlo Tree Search Implementation
-Created by: 10-OASIS-01
-Date: 2025-02-09
-
-Implements Monte Carlo Tree Search (MCTS) for decision making in the GridWorld environment.
-"""
-
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 from ..environment import GridWorld, Action

@@ -1,8 +1,6 @@
 """
 Actor-Critic Example
 Created by: 10-OASIS-01
-Date: 2025-02-09 06:15:52 UTC
-
 Demonstrates the usage of the Actor-Critic algorithm in the GridWorld environment.
 """
 

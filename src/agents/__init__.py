@@ -30,6 +30,6 @@ __all__ = [
     'MonteCarloEvaluator',
     'MCTSAgent',
     # Actor-Critic methods
-    # 'PPOAgent',
+    'PPOAgent',
     'ActorCriticAgent',
 ]
