@@ -11,10 +11,11 @@ MinRL provides clean, minimal implementations of fundamental reinforcement learn
   - Policy Iteration & Value Iteration
   - Tabular Q-Learning
   - Deep Q-Learning (DQN)
+  - Actor-Critic Methods
+  - Proximal Policy Optimization (PPO)
 - **Visualization Tools**: Built-in plotting and state-value visualization
 - **Comprehensive Tests**: 100% test coverage with pytest
 - **Educational Focus**: Well-documented code with step-by-step examples
-
 
 ## 📁 Project Structure
 
@@ -28,13 +29,17 @@ minrl/
 │   │   ├── monte_carlo.py  # Monte Carlo methods for policy evaluation
 │   │   ├── policy_optimization.py  # Policy iteration and value iteration implementations
 │   │   ├── q_learning.py  # Tabular Q-Learning algorithm
-│   │   └── deep_q_learning.py  # Deep Q-Learning (DQN) implementation using neural networks
+│   │   ├── deep_q_learning.py  # Deep Q-Learning (DQN) implementation using neural networks
+│   │   ├── actor_critic.py  # Actor-Critic implementation with separate networks
+│   │   └── ppo.py  # Proximal Policy Optimization implementation
 │   └── utils/             
 │       └── visualization.py  # Visualizes state values, learned policies, and rewards over episodes
 ├── tests/  # Comprehensive test suite ensuring correct functionality
 ├── examples/              
 │   ├── basic_navigation.py  # Basic navigation example using a static GridWorld
-│   └── run_experiments.py  # Runs experiments with all implemented RL algorithms
+│   ├── run_experiments.py  # Runs experiments with all implemented RL algorithms
+│   ├── actor_critic_example.py  # Actor-Critic implementation example
+│   └── ppo_example.py  # PPO implementation example
 └── docs/  # Implementation Guide for Beginners
 ```
 
@@ -66,6 +71,18 @@ minrl/
    - Experience replay memory
    - Target network implementation
    - PyTorch backend
+
+6. **Actor-Critic**
+   - Separate actor and critic networks
+   - Policy gradient with baseline
+   - Value function approximation
+   - Stable policy updates
+
+7. **Proximal Policy Optimization (PPO)**
+   - Clipped surrogate objective
+   - Combined actor-critic architecture
+   - Advantage estimation
+   - Entropy regularization
 
 ## 🛠️ Dependencies
 
@@ -100,43 +117,38 @@ Here's how you can start using the basic functionality of the library:
 
 ```python
 from minrl.environment import GridWorld
-from minrl.agents import DQNAgent, MonteCarloEvaluator
+from minrl.agents import DQNAgent, ActorCriticAgent, PPOAgent
 
 # Create a 3x3 GridWorld environment
 env = GridWorld(size=3)
 
 # Example 1: Deep Q-Learning
 dqn_agent = DQNAgent(env)
-rewards = dqn_agent.train(episodes=1000)
+dqn_rewards = dqn_agent.train(episodes=1000)
 dqn_agent.visualize_policy()
 
-# Example 2: Monte Carlo Policy Evaluation
-mc_evaluator = MonteCarloEvaluator(env, gamma=0.99)
-policy = create_random_policy(env)  # Create a random policy
-state_values = mc_evaluator.evaluate_policy(
-    policy,
-    num_episodes=1000,
-    first_visit=True  # Use first-visit Monte Carlo
-)
-mc_evaluator.print_values()
+# Example 2: Actor-Critic
+ac_agent = ActorCriticAgent(env)
+ac_rewards = ac_agent.train(episodes=1000)
+ac_agent.visualize_policy()
+
+# Example 3: PPO
+ppo_agent = PPOAgent(env)
+ppo_rewards = ppo_agent.train(episodes=1000)
+ppo_agent.visualize_policy()
 ```
 
-### **Run Basic Navigation Example**
-
-The **basic_navigation.py** example demonstrates the agent navigating a static GridWorld environment. To run this example:
+### **Run Advanced Policy Gradient Examples**
 
 ```bash
-# Run the basic navigation example
+# Run the Actor-Critic example
+python -m minrl.examples.actor_critic_example
+
+# Run the PPO example
+python -m minrl.examples.ppo_example
+
+# Run the Deep Q Learning. example      
 python -m minrl.examples.basic_navigation
-```
-
-### **Run Experiments with All Implemented Algorithms**
-
-To compare different RL algorithms (Monte Carlo, Q-learning, DQN, etc.) on the same environment:
-
-```bash
-# Run experiments with all RL algorithms
-python -m minrl.examples.run_experiments
 ```
 
 ## 🤝 Contributing
@@ -161,5 +173,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔗 Contact
 
 Created by: Yibin Liu  
+
 Email: [yibin.leon.liu@outlook.com](yibin.leon.liu@outlook.com)  
-Last Updated: 2025-02-09
+
+Last Updated: 2025-02-09 05:00:14
