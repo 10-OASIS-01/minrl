@@ -123,46 +123,76 @@ source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 # Install the package
 pip install -e .
 ```
+### Running Examples
 
-### **Basic Usage**
+The `examples/` directory contains various implementation examples for different RL algorithms:
 
-Here's how you can start using the basic functionality of the library:
+1. **Value-Based Methods**:
+```bash
+# Run Deep Q-Learning example
+python -m minrl.examples.deep_ql_example
+
+# Run tabular Q-Learning example
+python -m minrl.examples.q_learning_example
+
+# Run Value Iteration example
+python -m minrl.examples.value_iteration_example
+```
+
+2. **Policy-Based and Actor-Critic Methods**:
+```bash
+# Run Actor-Critic example
+python -m minrl.examples.actor_critic_example
+
+# Run PPO (Proximal Policy Optimization) example
+python -m minrl.examples.ppo_example
+```
+
+3. **Monte Carlo Methods**:
+```bash
+# Run Monte Carlo example
+python -m minrl.examples.monte_carlo_example
+
+# Run Monte Carlo Tree Search (MCTS) example
+python -m minrl.examples.mcts_example
+```
+
+### Basic Usage Example
+
+Here's a minimal example to get you started with a simple environment and agent:
 
 ```python
 from minrl.environment import GridWorld
-from minrl.agents import DQNAgent, ActorCriticAgent, PPOAgent
+from minrl.agents import QLearningAgent
 
 # Create a 3x3 GridWorld environment
 env = GridWorld(size=3)
 
-# Example 1: Deep Q-Learning
-dqn_agent = DQNAgent(env)
-dqn_rewards = dqn_agent.train(episodes=1000)
-dqn_agent.visualize_policy()
+# Initialize Q-Learning agent
+agent = QLearningAgent(
+    env,
+    learning_rate=0.1,
+    discount_factor=0.99,
+    epsilon=0.1
+)
 
-# Example 2: Actor-Critic
-ac_agent = ActorCriticAgent(env)
-ac_rewards = ac_agent.train(episodes=1000)
-ac_agent.visualize_policy()
+# Train the agent
+rewards = agent.train(episodes=1000)
 
-# Example 3: PPO
-ppo_agent = PPOAgent(env)
-ppo_rewards = ppo_agent.train(episodes=1000)
-ppo_agent.visualize_policy()
+# Visualize the learned policy and rewards
+agent.visualize_policy()
+agent.plot_rewards(rewards)
+
+# Test the trained agent
+state = env.reset()
+done = False
+while not done:
+    action = agent.act(state)
+    next_state, reward, done, _ = env.step(action)
+    state = next_state
 ```
 
-### **Run Advanced Policy Gradient Examples**
-
-```bash
-# Run the Actor-Critic example
-python -m minrl.examples.actor_critic_example
-
-# Run the PPO example
-python -m minrl.examples.ppo_example
-
-# Run the Deep Q Learning. example      
-python -m minrl.examples.basic_navigation
-```
+Each example in the `examples/` directory provides more detailed implementations and advanced features for specific algorithms. Check the source code of these examples for comprehensive usage patterns and parameter configurations.
 
 ## 🤝 Contributing
 
