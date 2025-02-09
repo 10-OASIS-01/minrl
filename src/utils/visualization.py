@@ -96,16 +96,28 @@ class Visualizer:
         fig, ax = plt.subplots(figsize=(8, 8))
         action_symbols = ['↑', '→', '↓', '←']
 
+        # Default to uniform policy for missing states
+        default_policy = [1.0 / len(action_symbols)] * len(action_symbols)
+
         for i in range(size):
             for j in range(size):
                 state = i * size + j
-                action_probs = policy[state]
+                action_probs = policy.get(state, default_policy)
                 action_idx = np.argmax(action_probs)
+
+                # Add different colors or markers for terminal states
+                if state in policy and sum(action_probs) > 0:
+                    color = 'black'
+                    fontsize = 20
+                else:
+                    color = 'gray'  # Use gray for uniform/default policies
+                    fontsize = 16
 
                 ax.text(j + 0.5, i + 0.5,
                         action_symbols[action_idx],
                         ha='center', va='center',
-                        fontsize=20)
+                        fontsize=fontsize,
+                        color=color)
 
         ax.grid(True)
         ax.set_xlim(0, size)

@@ -55,15 +55,15 @@ class PPOMemory:
         self.values = []
         self.log_probs = []
         self.dones = []
-    
+
     def add(self, state, action, reward, value, log_prob, done):
-        self.states.append(state)
+        self.states.append(state.numpy())  # Convert tensor to numpy array
         self.actions.append(action)
         self.rewards.append(reward)
         self.values.append(value)
         self.log_probs.append(log_prob)
         self.dones.append(done)
-    
+
     def clear(self):
         self.states.clear()
         self.actions.clear()
@@ -71,7 +71,7 @@ class PPOMemory:
         self.values.clear()
         self.log_probs.clear()
         self.dones.clear()
-    
+
     def get_batch(self) -> Tuple[torch.Tensor, ...]:
         states = torch.stack([torch.from_numpy(s) for s in self.states])
         actions = torch.tensor(self.actions)
@@ -142,56 +142,56 @@ class PPOAgent:
         state_tensor = torch.zeros(self.state_dim)
         state_tensor[state] = 1.0
         return state_tensor
-    
+
     def select_action(self, state: int) -> Tuple[Action, float, float]:
         """
         Select action using the current policy.
         Returns action, log probability, and value estimate.
         """
         state_tensor = self.state_to_tensor(state)
-        
+
         with torch.no_grad():
             # Get action probabilities and state value
             probs, value = self.network(state_tensor)
-            
+
             # Mask invalid actions
             valid_actions = self.env.get_valid_actions(state)
             mask = torch.zeros_like(probs)
             mask[list(valid_actions)] = 1
             masked_probs = probs * mask
-            
+
             # Normalize probabilities
             masked_probs = masked_probs / masked_probs.sum()
-            
+
             # Sample action
             m = torch.distributions.Categorical(masked_probs)
             action = m.sample()
             log_prob = m.log_prob(action)
-            
+
             return Action(action.item()), log_prob.item(), value.item()
-    
-    def compute_returns_and_advantages(self, 
-                                    rewards: torch.Tensor,
-                                    values: torch.Tensor,
-                                    dones: torch.Tensor,
-                                    next_value: float) -> Tuple[torch.Tensor, torch.Tensor]:
+
+    def compute_returns_and_advantages(self,
+                                       rewards: torch.Tensor,
+                                       values: torch.Tensor,
+                                       dones: torch.Tensor,
+                                       next_value: float) -> Tuple[torch.Tensor, torch.Tensor]:
         """Compute returns and advantages for PPO update"""
         returns = torch.zeros_like(rewards)
         advantages = torch.zeros_like(rewards)
-        
+
         next_return = next_value
         next_advantage = 0
-        
+
         for t in reversed(range(len(rewards))):
-            returns[t] = rewards[t] + self.gamma * next_return * (1 - dones[t])
-            td_error = rewards[t] + self.gamma * next_value * (1 - dones[t]) - values[t]
-            advantages[t] = td_error + self.gamma * next_advantage * (1 - dones[t])
-            
+            returns[t] = rewards[t] + self.gamma * next_return * (~dones[t])
+            td_error = rewards[t] + self.gamma * next_value * (~dones[t]) - values[t]
+            advantages[t] = td_error + self.gamma * next_advantage * (~dones[t])
+
             next_return = returns[t]
             next_advantage = advantages[t]
-        
+
         return returns, advantages
-    
+
     def update(self) -> Tuple[float, float, float]:
         """Update policy and value function using PPO"""
         states, actions, rewards, values, old_log_probs, dones = self.memory.get_batch()

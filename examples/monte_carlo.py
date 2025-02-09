@@ -138,24 +138,29 @@ def run_monte_carlo_demo():
     
     # Create environment with interesting terminal states
     env = GridWorld(size=4)
-    env.set_terminal_state((0, 3), 1.0)   # Goal state
-    env.set_terminal_state((1, 1), -1.0)  # Trap state
-    
+    # Convert coordinate tuples to state indices for terminal states
+    goal_state = env._pos_to_state((0, 3))  # Convert goal position to state index
+    trap_state = env._pos_to_state((1, 1))  # Convert trap position to state index
+
+    # Set terminal states using the terminal_states dictionary
+    env.terminal_states[goal_state] = 1.0   # Goal state
+    env.terminal_states[trap_state] = -1.0  # Trap state
+
     # Create test policies
     random_policy, simple_policy = create_test_policies(env)
-    
+
     # Compare methods with random policy
     print("\nEvaluating random policy...")
     random_policy_values = compare_evaluation_methods(env, random_policy)
-    
+
     # Compare methods with simple policy
     print("\nEvaluating simple policy...")
     simple_policy_values = compare_evaluation_methods(env, simple_policy)
-    
+
     # Analyze convergence with simple policy
     print("\nAnalyzing convergence with simple policy...")
     episodes, errors = analyze_convergence(env, simple_policy)
-    
+
     return {
         'random_policy_values': random_policy_values,
         'simple_policy_values': simple_policy_values,

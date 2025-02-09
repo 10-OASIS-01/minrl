@@ -25,16 +25,22 @@ def run_actor_critic_demo():
     
     # Create environment with interesting terminal states
     env = GridWorld(size=5)
-    env.set_terminal_state((0, 4), 1.0)  # Goal state with positive reward
-    env.set_terminal_state((2, 2), -1.0)  # Trap state with negative reward
-    
+
+    # Convert coordinate tuples to state indices for terminal states
+    goal_state = env._pos_to_state((0, 4))  # Convert goal position to state index
+    trap_state = env._pos_to_state((2, 2))  # Convert trap position to state index
+
+    # Set terminal states using the terminal_states dictionary
+    env.terminal_states[goal_state] = 1.0  # Goal state with positive reward
+    env.terminal_states[trap_state] = -1.0  # Trap state with negative reward
+
     # Create agent
     agent = ActorCriticAgent(env)
-    
+
     # Train the agent
     print("Training Actor-Critic agent...")
     rewards, lengths = agent.train(n_episodes=1000)
-    
+
     # Plot training results using the Visualizer
     training_fig = Visualizer.plot_training_results(
         rewards=rewards,
@@ -44,33 +50,33 @@ def run_actor_critic_demo():
         title='Actor-Critic Training Progress'
     )
     training_fig.show()
-    
+
     # Get and display the learned policy
     policy = agent.get_optimal_policy()
     policy_fig = Visualizer.plot_policy(
-        policy, 
-        env.size, 
+        policy,
+        env.size,
         "Actor-Critic Learned Policy"
     )
     policy_fig.show()
-    
+
     # Run and visualize a test episode
     print("\nRunning test episode with learned policy...")
     state = env.reset()
     states, actions, rewards = [state], [], []
     done = False
     total_reward = 0
-    
+
     while not done:
         action, _ = agent.select_action(state)
         next_state, reward, done, _ = env.step(action)
-        
+
         states.append(next_state)
         actions.append(action)
         rewards.append(reward)
         total_reward += reward
         state = next_state
-    
+
     # Visualize the test episode
     episode_fig = Visualizer.visualize_episode(
         env,
@@ -80,9 +86,9 @@ def run_actor_critic_demo():
         "Test Episode Trajectory"
     )
     episode_fig.show()
-    
+
     print(f"Test episode finished with total reward: {total_reward}")
-    
+
     return agent, policy, total_reward
 
 if __name__ == "__main__":
