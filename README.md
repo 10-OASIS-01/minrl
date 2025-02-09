@@ -7,6 +7,7 @@ MinRL provides clean, minimal implementations of fundamental reinforcement learn
 - **Modular GridWorld Environment**: Customizable grid sizes (3×3, 5×5) with configurable rewards and dynamics
 - **Clean Implementation** of core RL algorithms:
   - Policy Evaluation (Bellman Expectation)
+  - Monte Carlo Methods (First-visit and Every-visit)
   - Policy Iteration & Value Iteration
   - Tabular Q-Learning
   - Deep Q-Learning (DQN)
@@ -24,6 +25,7 @@ minrl/
 │   │   └── grid_world.py  # Core grid world logic, state transitions, rewards, and environment dynamics
 │   ├── agents/           
 │   │   ├── policy_evaluation.py  # Implements Bellman Expectation for policy evaluation
+│   │   ├── monte_carlo.py  # Monte Carlo methods for policy evaluation
 │   │   ├── policy_optimization.py  # Policy iteration and value iteration implementations
 │   │   ├── q_learning.py  # Tabular Q-Learning algorithm
 │   │   └── deep_q_learning.py  # Deep Q-Learning (DQN) implementation using neural networks
@@ -34,7 +36,6 @@ minrl/
 │   ├── basic_navigation.py  # Basic navigation example using a static GridWorld
 │   └── run_experiments.py  # Runs experiments with all implemented RL algorithms
 └── docs/  # Implementation Guide for Beginners
-
 ```
 
 ## 🎓 Implemented Algorithms
@@ -44,17 +45,23 @@ minrl/
    - Iterative value computation
    - Convergence validation
 
-2. **Policy/Value Iteration**
+2. **Monte Carlo Methods**
+   - First-visit Monte Carlo evaluation
+   - Every-visit Monte Carlo evaluation
+   - Episode-based learning
+   - Model-free approach
+
+3. **Policy/Value Iteration**
    - Value iteration with Bellman optimality
    - Policy iteration (evaluation + improvement)
    - Optimal policy extraction
 
-3. **Q-Learning**
+4. **Q-Learning**
    - Tabular state-action value learning
    - ε-greedy exploration
    - Hyperparameter tuning support
 
-4. **Deep Q-Learning (DQN)**
+5. **Deep Q-Learning (DQN)**
    - Neural network function approximation
    - Experience replay memory
    - Target network implementation
@@ -89,25 +96,30 @@ pip install -e .
 
 ### **Basic Usage**
 
-Here’s how you can start using the basic functionality of the library:
+Here's how you can start using the basic functionality of the library:
 
 ```python
 from minrl.environment import GridWorld
-from minrl.agents import DQNAgent
+from minrl.agents import DQNAgent, MonteCarloEvaluator
 
 # Create a 3x3 GridWorld environment
 env = GridWorld(size=3)
 
-# Initialize and train a DQN agent
-agent = DQNAgent(env)
-rewards = agent.train(episodes=1000)
+# Example 1: Deep Q-Learning
+dqn_agent = DQNAgent(env)
+rewards = dqn_agent.train(episodes=1000)
+dqn_agent.visualize_policy()
 
-# Visualize the learned policy
-agent.visualize_policy()
+# Example 2: Monte Carlo Policy Evaluation
+mc_evaluator = MonteCarloEvaluator(env, gamma=0.99)
+policy = create_random_policy(env)  # Create a random policy
+state_values = mc_evaluator.evaluate_policy(
+    policy,
+    num_episodes=1000,
+    first_visit=True  # Use first-visit Monte Carlo
+)
+mc_evaluator.print_values()
 ```
-
-This code sets up a simple **3x3 GridWorld**, trains a **DQN agent** for 1000 episodes, and then visualizes the learned policy.
-
 
 ### **Run Basic Navigation Example**
 
@@ -118,20 +130,14 @@ The **basic_navigation.py** example demonstrates the agent navigating a static G
 python -m minrl.examples.basic_navigation
 ```
 
-This will execute a basic navigation task where the agent tries to learn how to move in the 3x3 GridWorld. It will show how to set up the environment and train a simple agent.
-
-
 ### **Run Experiments with All Implemented Algorithms**
 
-To see how the different RL algorithms (like Q-learning, DQN, etc.) perform on the same environment, you can run **run_experiments.py**. This will execute a full set of experiments and compare the results.
+To compare different RL algorithms (Monte Carlo, Q-learning, DQN, etc.) on the same environment:
 
 ```bash
 # Run experiments with all RL algorithms
 python -m minrl.examples.run_experiments
 ```
-
-This command will automatically run experiments for all available RL algorithms, training agents using Q-Learning, Deep Q-Learning, and other approaches. The results will allow you to compare the performance of each algorithm in the same GridWorld environment.
-
 
 ## 🤝 Contributing
 
@@ -143,23 +149,17 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
 ## ✨ Acknowledgments
 
 - Inspired by [CleanRL](https://github.com/vwxyzjn/cleanrl) and [RLCode](https://github.com/rlcode/reinforcement-learning)
-- Special thanks to Professor Shiyu Zhao for his insightful course on the "Mathematical Foundations of Reinforcement Learning," which provided a solid foundation for my understanding of reinforcement learning. The course materials, including the textbook, PPTs, and code, can be found on his [GitHub repository](https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning), and the English [lecture videos](https://www.youtube.com/playlist?list=PLEhdbSEZZbDaFWPX4gehhwB9vJZJ1DNm8) and Chinese [lecture videos](https://space.bilibili.com/2044042934/lists/748665?type=season) are available online.
-
+- Special thanks to Professor Shiyu Zhao for his insightful course on the "Mathematical Foundations of Reinforcement Learning"
 
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-
 ## 🔗 Contact
 
 Created by: Yibin Liu  
-
 Email: [yibin.leon.liu@outlook.com](yibin.leon.liu@outlook.com)  
-
-Last Updated: 2025-02-08
-
+Last Updated: 2025-02-09
