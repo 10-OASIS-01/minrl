@@ -18,6 +18,8 @@ MinRL provides clean, minimal implementations of fundamental reinforcement learn
 - **Comprehensive Tests**: 100% test coverage with pytest
 - **Educational Focus**: Well-documented code with step-by-step examples
 
+**Note:** Monte Carlo methods perform poorly in GridWorld environments with sparse rewards, negative step costs, and mixed terminal states. This is because Monte Carlo methods require longer episodes to explore and learn, while algorithms like Q-learning can learn more effectively from individual transitions and are less affected by these challenges.
+
 ## 📁 Project Structure
 
 ```
