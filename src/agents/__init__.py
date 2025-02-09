@@ -11,6 +11,7 @@ from .policy_optimization import PolicyOptimizer
 from .q_learning import QLearningAgent
 from .deep_q_learning import DQNetwork, DQNAgent
 from .monte_carlo import MonteCarloEvaluator
+from .mcts import MCTSAgent
 
 __all__ = [
     'PolicyEvaluator',
@@ -19,4 +20,5 @@ __all__ = [
     'DQNetwork',
     'DQNAgent',
     'MonteCarloEvaluator',
+    'MCTSAgent',
 ]
