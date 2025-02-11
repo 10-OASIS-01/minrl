@@ -306,7 +306,7 @@ class Visualizer:
             episode_data: List of (state, action, reward) tuples
             title: Plot title
         """
-        fig, ax = plt.subplots(figsize=(8, 8))
+        fig, ax = plt.subplots(figsize=(9, 8))
 
         # Plot grid lines
         ax.grid(True, which='major', linestyle='-', alpha=0.5)

@@ -8,7 +8,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.environment import GridWorld
+from src.environment import GridWorld, Action
 from src.agents.ppo import PPOAgent
 from src.utils.visualization import Visualizer
 
@@ -94,7 +94,7 @@ def run_ppo_demo():
     total_reward = 0
 
     while not done:
-        action, _, _ = agent.select_action(state)
+        action, _, _ = agent.select_action(state, deterministic=True)
         next_state, reward, done, _ = env.step(action)
         episode_data.append((state, action, reward))
         total_reward += reward
@@ -115,3 +115,13 @@ def run_ppo_demo():
 
 if __name__ == "__main__":
     agent, policy, final_reward = run_ppo_demo()
+
+    # 检查initial state (0,0)的policy
+    initial_state = 0
+    action_probs = policy[initial_state]
+    print(f"Action probabilities at initial state: {action_probs}")
+    print(f"Selected action: {Action(np.argmax(action_probs)).name}")
+
+    # 实际执行一次动作选择
+    action, _, _ = agent.select_action(initial_state)
+    print(f"Actually selected action: {action.name}")

@@ -191,7 +191,7 @@ class PPOAgent:
         state_tensor[state] = 1.0
         return state_tensor
 
-    def select_action(self, state: int) -> Tuple[Action, torch.Tensor, float]:
+    def select_action(self, state: int, deterministic: bool = False) -> Tuple[Action, torch.Tensor, float]:
         """
         Select action using the current policy.
 
@@ -206,11 +206,7 @@ class PPOAgent:
         """
         with torch.no_grad():
             state_tensor = self.state_to_tensor(state)
-
-            # Get action distribution from actor
             dist = self.actor(state_tensor)
-
-            # Get value estimate from critic
             value = self.critic(state_tensor).item()
 
             # Mask invalid actions
@@ -232,8 +228,13 @@ class PPOAgent:
 
             masked_dist = torch.distributions.Categorical(probs=masked_probs)
 
-            # Sample action
-            action = masked_dist.sample()
+            if deterministic:
+                # 在deterministic模式下，选择最高概率的动作
+                action = torch.argmax(masked_probs)
+            else:
+                # 在stochastic模式下，使用随机采样
+                action = masked_dist.sample()
+
             log_prob = masked_dist.log_prob(action)
 
             return Action(action.item()), log_prob, value
