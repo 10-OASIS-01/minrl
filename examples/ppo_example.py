@@ -24,14 +24,22 @@ def run_ppo_demo():
     # Create environment with interesting terminal states
     env = GridWorld(size=9)
 
-    # Set terminal states that don't conflict with starting position (2,2)
-    goal_state = env._pos_to_state((0, 4))  # Top-right corner
-    trap_state = env._pos_to_state((4, 0))  # Bottom-left corner
+    # Set terminal states that don't conflict with starting position (0,0)
+    goal_state = env._pos_to_state((4, 6))  # Bottom-right corner
+    trap_states = [
+        env._pos_to_state((2, 5)),
+        env._pos_to_state((2, 4)),
+        env._pos_to_state((3, 4)),
+        env._pos_to_state((4, 4)),
+        env._pos_to_state((5, 4))
+    ]
 
     # Clear default terminal states and set new ones
     env.terminal_states.clear()  # Clear default terminal states
-    env.terminal_states[goal_state] = 1.0
-    env.terminal_states[trap_state] = -1.0  # Trap state with negative reward
+    env.terminal_states[goal_state] = 3.0
+    for trap_state in trap_states:
+        env.terminal_states[trap_state] = -1.0  # Trap states with negative reward
+
 
     # Create PPO agent with custom hyperparameters
     agent = PPOAgent(
@@ -49,7 +57,7 @@ def run_ppo_demo():
 
     # Train the agent
     print("Training PPO agent...")
-    n_episodes = 1000
+    n_episodes = 2000
     max_steps = 100
     update_interval = 2048
     rewards, lengths = agent.train(

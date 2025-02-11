@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 def run_value_iteration_example():
     # Create a 5x5 GridWorld environment
-    env = GridWorld(size=5)
+    env = GridWorld(size=9)
 
     # Set terminal states with different rewards by modifying terminal_states dictionary directly
     env.terminal_states[(0, 4)] = 1.0  # Goal state with positive reward

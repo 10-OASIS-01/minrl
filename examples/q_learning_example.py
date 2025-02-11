@@ -13,8 +13,24 @@ import matplotlib.pyplot as plt
 
 
 def run_q_learning_example():
-    # Create environment with new parameters
-    env = GridWorld(size=5)
+    # Create environment with interesting terminal states
+    env = GridWorld(size=9)
+
+    # Set terminal states that don't conflict with starting position (0,0)
+    goal_state = env._pos_to_state((4, 6))  # Bottom-right corner
+    trap_states = [
+        env._pos_to_state((2, 5)),
+        env._pos_to_state((2, 4)),
+        env._pos_to_state((3, 4)),
+        env._pos_to_state((4, 4)),
+        env._pos_to_state((5, 4))
+    ]
+
+    # Clear default terminal states and set new ones
+    env.terminal_states.clear()  # Clear default terminal states
+    env.terminal_states[goal_state] = 3.0
+    for trap_state in trap_states:
+        env.terminal_states[trap_state] = -1.0  # Trap states with negative reward
 
     # Create Q-Learning agent with optimized parameters
     agent = QLearningAgent(
@@ -63,7 +79,23 @@ def run_q_learning_example():
 
 def compare_algorithms():
     """Compare Value Iteration and Q-Learning approaches."""
-    env = GridWorld(size=5)
+    env = GridWorld(size=9)
+
+    # Set terminal states that don't conflict with starting position (0,0)
+    goal_state = env._pos_to_state((4, 6))  # Bottom-right corner
+    trap_states = [
+        env._pos_to_state((2, 5)),
+        env._pos_to_state((2, 4)),
+        env._pos_to_state((3, 4)),
+        env._pos_to_state((4, 4)),
+        env._pos_to_state((5, 4))
+    ]
+
+    # Clear default terminal states and set new ones
+    env.terminal_states.clear()  # Clear default terminal states
+    env.terminal_states[goal_state] = 3.0
+    for trap_state in trap_states:
+        env.terminal_states[trap_state] = -1.0  # Trap states with negative reward
 
     # Get Value Iteration policy
     vi_optimizer = PolicyOptimizer(env)
