@@ -28,36 +28,28 @@ def run_mcts_example():
     np.random.seed(42)
 
     # Create environment with interesting terminal states
-    env = GridWorld(size=9)
+    env = GridWorld(size=5)
 
-    # Set terminal states that don't conflict with starting position (0,0)
-    goal_state = env._pos_to_state((4, 6))  # Bottom-right corner
-    trap_states = [
-        env._pos_to_state((2, 5)),
-        env._pos_to_state((2, 4)),
-        env._pos_to_state((3, 4)),
-        env._pos_to_state((4, 4)),
-        env._pos_to_state((5, 4))
-    ]
+    # Set terminal states with different rewards
+    goal_state = env._pos_to_state((4, 4))  # Bottom-right corner
+    trap_state = env._pos_to_state((2, 2))  # Center of the grid
 
-    # Clear default terminal states and set new ones
     env.terminal_states.clear()  # Clear default terminal states
-    env.terminal_states[goal_state] = 10.0
-    for trap_state in trap_states:
-        env.terminal_states[trap_state] = -2.0  # Trap states with negative reward
+    env.terminal_states[goal_state] = 5.0    # High reward for reaching goal
+    env.terminal_states[trap_state] = -2.0   # Penalty for falling into trap
 
     agent = MCTSAgent(
         env,
-        num_simulations=100,
-        exploration_constant=1.41,
-        max_rollout_steps=50
+        num_simulations=200,
+        exploration_constant=2.0,
+        max_rollout_steps=100
     )
 
     # Create visualizer
     viz = Visualizer()
 
     # Run episodes and collect statistics
-    num_episodes = 50
+    num_episodes = 100
     episode_rewards = []
     episode_lengths = []
     policies = {}

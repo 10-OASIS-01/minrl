@@ -1,8 +1,3 @@
-"""
-Basic navigation example using static GridWorld
-Created by: 10-OASIS-01
-"""
-
 import sys
 import os
 
