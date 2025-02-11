@@ -294,5 +294,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Created by: Yibin Liu  
 
 Email: [yibin.leon.liu@outlook.com](yibin.leon.liu@outlook.com)  
-
-Last Updated: 2025-02-09 05:00:14
