@@ -75,8 +75,8 @@ class GridWorld:
         Returns:
             int: Initial state number
         """
-        # Start in the center of the grid
-        self.current_pos = (self.size // 2, self.size // 2)
+        # Start at position (0, 0)
+        self.current_pos = (0, 0)
         return self._pos_to_state(self.current_pos)
 
     def _pos_to_state(self, pos: Tuple[int, int]) -> int:
