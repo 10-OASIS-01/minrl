@@ -157,6 +157,31 @@ python -m minrl.examples.monte_carlo_example
 python -m minrl.examples.mcts_example
 ```
 
+Here are some example results from training a PPO (Proximal Policy Optimization) agent in our GridWorld environment:
+
+
+<table>
+  <tr>
+    <td><img src="figure/train_results_ppo.png" alt="Policy Visualization" width="800"/></td>
+  </tr>
+  <tr>
+    <td><i>Training curves showing the episode rewards and loss during PPO training</i></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td><img src="figure/policy_ppo.png" alt="Policy Visualization" width="400"/></td>
+    <td><img src="figure/trajectory_ppo.png" alt="Agent Trajectory" width="400"/></td>
+  </tr>
+  <tr>
+    <td><i>Visualization of the learned policy in the GridWorld environment</i></td>
+    <td><i>Example trajectory of the trained agent navigating through the environment</i></td>
+  </tr>
+</table>
+
+
+
 ### Basic Usage Example
 
 Here's a minimal example to get you started with a simple environment and agent:
