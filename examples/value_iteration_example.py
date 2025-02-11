@@ -12,12 +12,16 @@ import matplotlib.pyplot as plt
 
 
 def run_value_iteration_example():
-    # Create a 5x5 GridWorld environment
-    env = GridWorld(size=9)
+    # Create environment with interesting terminal states
+    env = GridWorld(size=5)
 
-    # Set terminal states with different rewards by modifying terminal_states dictionary directly
-    env.terminal_states[(0, 4)] = 1.0  # Goal state with positive reward
-    env.terminal_states[(2, 2)] = -1.0  # Trap state with negative reward
+    # Set terminal states with different rewards
+    goal_state = env._pos_to_state((4, 4))  # Bottom-right corner
+    trap_state = env._pos_to_state((2, 2))  # Center of the grid
+
+    env.terminal_states.clear()  # Clear default terminal states
+    env.terminal_states[goal_state] = 5.0    # High reward for reaching goal
+    env.terminal_states[trap_state] = -2.0   # Penalty for falling into trap
 
     # Create policy optimizer
     optimizer = PolicyOptimizer(env, gamma=0.99)
@@ -71,10 +75,16 @@ if __name__ == "__main__":
     # Run the example
     optimal_policy, state_values = run_value_iteration_example()
 
-    # Create environment for evaluation
+    # Create environment with interesting terminal states
     env = GridWorld(size=5)
-    env.terminal_states[(0, 4)] = 1.0
-    env.terminal_states[(2, 2)] = -1.0
+
+    # Set terminal states with different rewards
+    goal_state = env._pos_to_state((4, 4))  # Bottom-right corner
+    trap_state = env._pos_to_state((2, 2))  # Center of the grid
+
+    env.terminal_states.clear()  # Clear default terminal states
+    env.terminal_states[goal_state] = 5.0    # High reward for reaching goal
+    env.terminal_states[trap_state] = -2.0   # Penalty for falling into trap
 
     # Evaluate the optimal policy
     mean_reward, std_reward = evaluate_policy(env, optimal_policy)

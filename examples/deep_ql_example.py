@@ -38,9 +38,9 @@ def run_basic_navigation():
 
     # Clear default terminal states and set new ones
     env.terminal_states.clear()  # Clear default terminal states
-    env.terminal_states[goal_state] = 3.0
+    env.terminal_states[goal_state] = 10.0
     for trap_state in trap_states:
-        env.terminal_states[trap_state] = -1.0  # Trap states with negative reward
+        env.terminal_states[trap_state] = -2.0  # Trap states with negative reward
 
     # Create agent
     agent = DQNAgent(

@@ -2,6 +2,7 @@ import numpy as np
 from typing import Dict, List, Tuple, Optional
 from ..environment.grid_world import GridWorld, Action
 
+
 class MonteCarloEvaluator:
     """
     A class to evaluate state values and action values using Monte Carlo methods.
@@ -20,6 +21,48 @@ class MonteCarloEvaluator:
         self.gamma = gamma
         self.state_values = np.zeros(env.get_state_space_size())
         self.returns = {state: [] for state in range(env.get_state_space_size())}
+
+    def create_random_policy(self) -> Dict[int, List[float]]:
+        """
+        Create a random policy for the environment.
+
+        Returns:
+            Dict[int, List[float]]: A dictionary mapping states to action probabilities
+        """
+        policy = {}
+        n_actions = self.env.get_action_space_size()
+        for state in range(self.env.get_state_space_size()):
+            # Equal probability for all actions in each state
+            policy[state] = [1.0 / n_actions] * n_actions
+        return policy
+
+    def create_simple_policy(self) -> Dict[int, List[float]]:
+        """
+        Create a simple deterministic policy that always tries to move right or down.
+
+        Returns:
+            Dict[int, List[float]]: A dictionary mapping states to action probabilities
+        """
+        policy = {}
+        n_actions = self.env.get_action_space_size()
+
+        for state in range(self.env.get_state_space_size()):
+            row, col = self.env._state_to_pos(state)
+            action_probs = [0.0] * n_actions
+
+            # If at rightmost column, try to move down
+            if col == self.env.size - 1:
+                action_probs[Action.DOWN] = 1.0
+            # If at bottom row, try to move right
+            elif row == self.env.size - 1:
+                action_probs[Action.RIGHT] = 1.0
+            # Otherwise, equal probability of moving right or down
+            else:
+                action_probs[Action.RIGHT] = 0.5
+                action_probs[Action.DOWN] = 0.5
+
+            policy[state] = action_probs
+        return policy
 
     def generate_episode(self, policy: Dict[int, List[float]]) -> List[Tuple[int, int, float]]:
         """
@@ -50,9 +93,9 @@ class MonteCarloEvaluator:
         return episode
 
     def evaluate_policy(self,
-                       policy: Dict[int, List[float]],
-                       num_episodes: int = 1000,
-                       first_visit: bool = True) -> np.ndarray:
+                        policy: Dict[int, List[float]],
+                        num_episodes: int = 1000,
+                        first_visit: bool = True) -> np.ndarray:
         """
         Evaluate a policy using Monte Carlo policy evaluation.
 
