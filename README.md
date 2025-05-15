@@ -189,32 +189,70 @@ Here's a minimal example to get you started with a simple environment and agent:
 ```python
 from src.environment import GridWorld
 from src.agents import QLearningAgent
+from src.utils.visualization import Visualizer
+import matplotlib.pyplot as plt
 
-# Create a 3x3 GridWorld environment
-env = GridWorld(size=3)
+# Create environment with interesting terminal states
+env = GridWorld(size=9)
 
-# Initialize Q-Learning agent
+# Set terminal states that don't conflict with starting position (0,0)
+goal_state = env._pos_to_state((4, 6))  # Bottom-right corner
+trap_states = [
+    env._pos_to_state((2, 5)),
+    env._pos_to_state((2, 4)),
+    env._pos_to_state((3, 4)),
+    env._pos_to_state((4, 4)),
+    env._pos_to_state((5, 4))
+]
+
+# Clear default terminal states and set new ones
+env.terminal_states.clear()  # Clear default terminal states
+env.terminal_states[goal_state] = 3.0
+for trap_state in trap_states:
+    env.terminal_states[trap_state] = -1.0  # Trap states with negative reward
+
+
+# Create Q-Learning agent with optimized parameters
 agent = QLearningAgent(
     env,
     learning_rate=0.1,
-    discount_factor=0.99,
-    epsilon=0.1
+    gamma=0.99,
+    epsilon=1.0,
+    epsilon_decay=0.995,
+    min_epsilon=0.01
 )
 
 # Train the agent
-rewards = agent.train(episodes=1000)
+print("Training Q-Learning Agent...")
+n_episodes = 1000
+rewards, lengths = agent.train(
+    n_episodes=n_episodes,
+    max_steps=100
+)
 
-# Visualize the learned policy and rewards
-agent.visualize_policy()
-agent.plot_rewards(rewards)
+# Visualize results
+viz = Visualizer()
 
-# Test the trained agent
-state = env.reset()
-done = False
-while not done:
-    action = agent.act(state)
-    next_state, reward, done, _ = env.step(action)
-    state = next_state
+# Plot training progress
+viz.plot_training_results(
+    rewards=rewards,
+    lengths=lengths,
+    title='Q-Learning Training Progress'
+)
+plt.show()
+
+# Print final Q-values
+print("\nFinal Q-values for each state:")
+agent.print_q_values()
+
+# Get and visualize optimal policy
+optimal_policy = agent.get_optimal_policy()
+viz.plot_policy(
+    optimal_policy,
+    env.size,
+    title='Learned Policy from Q-Learning'
+)
+plt.show()
 ```
 
 Each example in the `examples/` directory provides more detailed implementations and advanced features for specific algorithms. Check the source code of these examples for comprehensive usage patterns and parameter configurations.
