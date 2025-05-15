@@ -130,31 +130,31 @@ The `examples/` directory contains various implementation examples for different
 1. **Value-Based Methods**:
 ```bash
 # Run Deep Q-Learning example
-python -m minrl.examples.deep_ql_example
+python -m examples.deep_ql_example
 
 # Run tabular Q-Learning example
-python -m minrl.examples.q_learning_example
+python -m examples.q_learning_example
 
 # Run Value Iteration example
-python -m minrl.examples.value_iteration_example
+python -m examples.value_iteration_example
 ```
 
 2. **Policy-Based and Actor-Critic Methods**:
 ```bash
 # Run Actor-Critic example
-python -m minrl.examples.actor_critic_example
+python -m examples.actor_critic_example
 
 # Run PPO (Proximal Policy Optimization) example
-python -m minrl.examples.ppo_example
+python -m examples.ppo_example
 ```
 
 3. **Monte Carlo Methods**:
 ```bash
 # Run Monte Carlo example
-python -m minrl.examples.monte_carlo_example
+python -m examples.monte_carlo_example
 
 # Run Monte Carlo Tree Search (MCTS) example
-python -m minrl.examples.mcts_example
+python -m examples.mcts_example
 ```
 
 Here are some example results from training a PPO (Proximal Policy Optimization) agent in our GridWorld environment:
@@ -187,8 +187,8 @@ Here are some example results from training a PPO (Proximal Policy Optimization)
 Here's a minimal example to get you started with a simple environment and agent:
 
 ```python
-from minrl.environment import GridWorld
-from minrl.agents import QLearningAgent
+from src.environment import GridWorld
+from src.agents import QLearningAgent
 
 # Create a 3x3 GridWorld environment
 env = GridWorld(size=3)
