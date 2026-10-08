@@ -1,0 +1,13 @@
+algorithm: ppo
+env: GridWorld
+env_kwargs:
+  size: 5
+  max_episode_steps: 100
+seed: 0
+total_timesteps: 10000
+eval_interval: 1000
+final_eval_episodes: 20
+tensorboard: true
+agent:
+  rollout_steps: 256
+  num_epochs: 4

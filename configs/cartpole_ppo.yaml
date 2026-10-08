@@ -1,0 +1,18 @@
+algorithm: ppo
+env: CartPole-v1
+seed: 0
+total_timesteps: 100000
+eval_interval: 5000
+eval_episodes: 10
+final_eval_episodes: 100
+tensorboard: true
+agent:
+  hidden_dim: 64
+  learning_rate: 0.0003
+  rollout_steps: 2048
+  batch_size: 64
+  num_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_ratio: 0.2
+  max_grad_norm: 0.5

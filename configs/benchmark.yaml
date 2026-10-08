@@ -1,0 +1,8 @@
+env: CartPole-v1
+algorithms: [dqn, dqn_per, ppo]
+seeds: [0, 1, 2, 3, 4]
+total_timesteps: 100000
+eval_interval: 5000
+eval_episodes: 10
+final_eval_episodes: 100
+tensorboard: true

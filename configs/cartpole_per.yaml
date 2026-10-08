@@ -1,0 +1,11 @@
+algorithm: dqn_per
+env: CartPole-v1
+seed: 0
+total_timesteps: 100000
+eval_interval: 5000
+eval_episodes: 10
+final_eval_episodes: 100
+tensorboard: true
+agent:
+  alpha: 0.6
+  beta_start: 0.4

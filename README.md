@@ -1,334 +1,172 @@
-# MinRL: Minimal, Clean Code for Reinforcement Learning
+# MinRL
 
-MinRL provides clean, minimal implementations of fundamental reinforcement learning algorithms in a customizable GridWorld environment. The project focuses on educational clarity and implementation simplicity while maintaining production-quality code standards.
+**Learn reinforcement learning by reading the learning loop.**
 
-## 🌟 Key Features
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-0072B2)](pyproject.toml)
+[![MIT](https://img.shields.io/badge/license-MIT-009E73)](LICENSE)
 
-- **Modular GridWorld Environment**: Customizable grid sizes (3×3, 5×5) with configurable rewards and dynamics
-- **Clean Implementation** of core RL algorithms:
-  - Policy Evaluation (Bellman Expectation)
-  - Monte Carlo Methods (First-visit and Every-visit)
-  - Monte Carlo Tree Search (MCTS)
-  - Policy Iteration & Value Iteration
-  - Tabular Q-Learning
-  - Deep Q-Learning (DQN)
-  - Actor-Critic Methods
-  - Proximal Policy Optimization (PPO)
-- **Visualization Tools**: Built-in plotting and state-value visualization
-- **Comprehensive Tests**: 100% test coverage with pytest
-- **Educational Focus**: Well-documented code with step-by-step examples
+Small implementations of tabular and deep RL, with the mathematics kept close to the code.
+Start with a grid, learn a value function, then follow the same ideas into DQN and PPO.
+Each agent owns its training loop and update rule. No trainer framework or configuration file
+is needed to run the lessons; experiment tracking is an optional next step.
 
-**Note:** Monte Carlo methods perform poorly in GridWorld environments with sparse rewards, negative step costs, and mixed terminal states. This is because Monte Carlo methods require longer episodes to explore and learn, while algorithms like Q-learning can learn more effectively from individual transitions and are less affected by these challenges.
+![A learned GridWorld policy and its complete path to the goal](figure/gridworld.png)
 
-## 📁 Project Structure
+*Q-learning on a 5×5 grid, seed 0, 1,500 episodes. Squares mark the start; the circle marks
+the final state. Traps terminate the episode—they are not walls. [Reproduce this figure](examples/plot_gridworld.py).*
 
-```
-minrl/
-├── src/
-│   ├── environment/       
-│   │   └── grid_world.py  # Core grid world logic, state transitions, rewards, and environment dynamics
-│   ├── agents/           
-│   │   ├── policy_evaluation.py  # Implements Bellman Expectation for policy evaluation
-│   │   ├── monte_carlo.py  # Monte Carlo methods for policy evaluation
-│   │   ├── mcts.py  # Monte Carlo Tree Search implementation
-│   │   ├── policy_optimization.py  # Policy iteration and value iteration implementations
-│   │   ├── q_learning.py  # Tabular Q-Learning algorithm
-│   │   ├── deep_q_learning.py  # Deep Q-Learning (DQN) implementation using neural networks
-│   │   ├── actor_critic.py  # Actor-Critic implementation with separate networks
-│   │   └── ppo.py  # Proximal Policy Optimization implementation
-│   └── utils/             
-│       └── visualization.py  # Visualizes state values, learned policies, and rewards over episodes
-├── tests/  # Comprehensive test suite ensuring correct functionality
-├── examples/              
-│   ├── basic_navigation.py  # Basic navigation example using a static GridWorld
-│   ├── run_experiments.py  # Runs experiments with all implemented RL algorithms
-│   ├── mcts_example.py  # Monte Carlo Tree Search example
-│   ├── actor_critic_example.py  # Actor-Critic implementation example
-│   └── ppo_example.py  # PPO implementation example
-└── docs/  # Implementation Guide for Beginners
-```
-## 🎓 Implemented Algorithms
-
-1. **Policy-based Methods**
-- `PolicyEvaluator`: Implements policy evaluation using the Bellman expectation equation
-- `PolicyOptimizer`: Implements both Policy Iteration and Value Iteration algorithms
-  - Policy Iteration combines policy evaluation and policy improvement
-  - Value Iteration uses the Bellman optimality equation
-
-2. **Value-based Methods**
-- `QLearningAgent`: Implements tabular Q-learning with ε-greedy exploration
-  - Features: Experience replay, ε-greedy exploration with decay
-  - Maintains a Q-table for state-action values
-  
-- `DQNAgent`: Implements Deep Q-Network (DQN) with several modern improvements
-  - Features:
-    - Neural network function approximation
-    - Experience replay buffer
-    - Target network for stability
-    - ε-greedy exploration with decay
-    - Batch training
-    - Prioritized experience replay
-
-3. **Monte Carlo Methods**
-- `MonteCarloEvaluator`: Implements Monte Carlo policy evaluation
-  - Supports both first-visit and every-visit MC methods
-  - Model-free learning from episodes
-  
-- `MCTSAgent`: Implements Monte Carlo Tree Search
-  - Features:
-    - UCT (Upper Confidence Bound for Trees) selection
-    - Tree expansion and backpropagation
-    - Random rollout simulations
-    - Exploration parameter tuning
-    - Optimal policy extraction
-
-4. **Actor-Critic Methods**
-- `ActorCriticAgent`: Implements the Actor-Critic architecture
-  - Separate networks for policy (actor) and value function (critic)
-  - Policy gradient with baseline
-  - Value function approximation
-  
-- `PPOAgent`: Implements Proximal Policy Optimization (PPO)
-  - Features:
-    - Clipped surrogate objective
-    - Combined actor-critic architecture
-    - Generalized Advantage Estimation (GAE)
-    - Value function clipping
-    - Entropy regularization
-    - Mini-batch training
-
-## 🛠️ Dependencies
+## Start in a few minutes
 
 ```bash
-- Python 3.7+
-- NumPy >= 1.19.0
-- PyTorch >= 1.8.0
-- Matplotlib >= 3.3.0
-- Seaborn >= 0.11.0
-```
-
-## 🚀 Quick Start
-
-### Installation
-
-```bash
-# Clone the repository
 git clone https://github.com/10-OASIS-01/minrl.git
 cd minrl
-
-# Create a virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
-
-# Install the package
-pip install -e .
-```
-### Running Examples
-
-The `examples/` directory contains various implementation examples for different RL algorithms:
-
-1. **Value-Based Methods**:
-```bash
-# Run Deep Q-Learning example
-python -m examples.deep_ql_example
-
-# Run tabular Q-Learning example
+python3 -m venv .venv                  # Python 3.10 or newer
+source .venv/bin/activate              # Windows: .venv\Scripts\activate
+python -m pip install -e .
+python -m examples.basic_navigation
 python -m examples.q_learning_example
-
-# Run Value Iteration example
-python -m examples.value_iteration_example
 ```
 
-2. **Policy-Based and Actor-Critic Methods**:
-```bash
-# Run Actor-Critic example
-python -m examples.actor_critic_example
-
-# Run PPO (Proximal Policy Optimization) example
-python -m examples.ppo_example
-```
-
-3. **Monte Carlo Methods**:
-```bash
-# Run Monte Carlo example
-python -m examples.monte_carlo_example
-
-# Run Monte Carlo Tree Search (MCTS) example
-python -m examples.mcts_example
-```
-
-Here are some example results from training a PPO (Proximal Policy Optimization) agent in our GridWorld environment:
-
-
-<table>
-  <tr>
-    <td><img src="figure/train_results_ppo.png" alt="Policy Visualization" width="800"/></td>
-  </tr>
-  <tr>
-    <td><i>Training curves showing the episode rewards and loss during PPO training</i></td>
-  </tr>
-</table>
-
-<table>
-  <tr>
-    <td><img src="figure/policy_ppo.png" alt="Policy Visualization" width="400"/></td>
-    <td><img src="figure/trajectory_ppo.png" alt="Agent Trajectory" width="400"/></td>
-  </tr>
-  <tr>
-    <td><i>Visualization of the learned policy in the GridWorld environment</i></td>
-    <td><i>Example trajectory of the trained agent navigating through the environment</i></td>
-  </tr>
-</table>
-
-
-
-### Basic Usage Example
-
-Here's a minimal example to get you started with a simple environment and agent:
+Or use the locked development environment: `uv sync --python 3.11 --all-extras --frozen`.
 
 ```python
-from src.environment import GridWorld
-from src.agents import QLearningAgent
-from src.utils.visualization import Visualizer
-import matplotlib.pyplot as plt
+from minrl import GridWorld, QLearningAgent
 
-# Create environment with interesting terminal states
-env = GridWorld(size=9)
-
-# Set terminal states that don't conflict with starting position (0,0)
-goal_state = env._pos_to_state((4, 6))  # Bottom-right corner
-trap_states = [
-    env._pos_to_state((2, 5)),
-    env._pos_to_state((2, 4)),
-    env._pos_to_state((3, 4)),
-    env._pos_to_state((4, 4)),
-    env._pos_to_state((5, 4))
-]
-
-# Clear default terminal states and set new ones
-env.terminal_states.clear()  # Clear default terminal states
-env.terminal_states[goal_state] = 3.0
-for trap_state in trap_states:
-    env.terminal_states[trap_state] = -1.0  # Trap states with negative reward
-
-
-# Create Q-Learning agent with optimized parameters
-agent = QLearningAgent(
-    env,
-    learning_rate=0.1,
-    gamma=0.99,
-    epsilon=1.0,
-    epsilon_decay=0.995,
-    min_epsilon=0.01
-)
-
-# Train the agent
-print("Training Q-Learning Agent...")
-n_episodes = 1000
-rewards, lengths = agent.train(
-    n_episodes=n_episodes,
-    max_steps=100
-)
-
-# Visualize results
-viz = Visualizer()
-
-# Plot training progress
-viz.plot_training_results(
-    rewards=rewards,
-    lengths=lengths,
-    title='Q-Learning Training Progress'
-)
-plt.show()
-
-# Print final Q-values
-print("\nFinal Q-values for each state:")
-agent.print_q_values()
-
-# Get and visualize optimal policy
-optimal_policy = agent.get_optimal_policy()
-viz.plot_policy(
-    optimal_policy,
-    env.size,
-    title='Learned Policy from Q-Learning'
-)
-plt.show()
+env = GridWorld(size=3)
+agent = QLearningAgent(env, seed=0)
+rewards, lengths = agent.train(n_episodes=1000, max_steps=100)
+policy = agent.get_optimal_policy()
 ```
 
-Each example in the `examples/` directory provides more detailed implementations and advanced features for specific algorithms. Check the source code of these examples for comprehensive usage patterns and parameter configurations.
+## Follow the ideas, in order
 
-## 🤝 Contributing
+| Lesson | Question | Run with `python -m` | Read next |
+| --- | --- | --- | --- |
+| 1 · Environment | What are state, action and reward? | `examples.basic_navigation` | [GridWorld](src/minrl/environment/grid_world.py) |
+| 2 · Planning | What if we know every transition? | `examples.value_iteration_example` | [Value / policy iteration](src/minrl/agents/policy_optimization.py) |
+| 3 · Q-learning | Can experience replace the model? | `examples.q_learning_example` | [Q-learning update](src/minrl/agents/q_learning.py) |
+| 4 · Monte Carlo | Can we learn from complete returns? | `examples.monte_carlo_example` | [Monte Carlo prediction](src/minrl/agents/monte_carlo.py) |
+| 5 · Search | Can we simulate before choosing? | `examples.mcts_example` | [MCTS](src/minrl/agents/mcts.py) |
+| 6 · DQN | Can a network replace the table? | `examples.deep_ql_example` | [DQN update and training](src/minrl/agents/deep_q_learning.py) |
+| 7 · Actor-critic | Can the critic teach a policy directly? | `examples.actor_critic_example` | [One-step actor-critic](src/minrl/agents/actor_critic.py) |
+| 8 · PPO | How do we reuse a rollout carefully? | `examples.ppo_example` | [GAE and PPO](src/minrl/agents/ppo.py) |
 
-Contributions are welcome! MinRL aims to be an educational and clean implementation of RL algorithms. Before submitting your contribution, please consider the following guidelines:
+The [learning guide](docs/learning-guide.md) connects each equation to its implementation,
+explains the training/update flow, and includes small exercises with expected answers.
 
-### Getting Started
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## What is implemented?
 
-### Priority Areas for Contribution
+| Method | Environment | Learning data | Save / load |
+| --- | --- | --- | --- |
+| Policy evaluation; value / policy iteration | GridWorld | Exact transition model | Not needed: recompute |
+| Monte Carlo prediction | GridWorld | Complete episodes; first / every visit | Not provided |
+| MCTS | GridWorld | Model-based simulations | Not needed: search online |
+| Q-learning | GridWorld | Online TD; optional uniform replay | JSON Q-table |
+| DQN | Gymnasium discrete actions | Uniform replay; optional PER | PyTorch checkpoint |
+| Actor-critic | GridWorld or supported Gymnasium environments | One-step TD | PyTorch checkpoint |
+| PPO | Gymnasium discrete actions | On-policy rollout, GAE, clipping | PyTorch checkpoint |
 
-#### 1. Environment Enhancements
-- **Monte Carlo-Friendly Environments**:
-  - Implementing intermediate rewards to address sparse reward issues
-  - Adjusting reward structures to balance exploration-exploitation
-  - Adding state-dependent reward scaling
-  - Introducing progressive difficulty levels
-  - Implementing curriculum learning support
-  - Adding option for reversible terminal states
+Neural agents accept a discrete observation (one-hot encoded) or a one-dimensional `Box`
+observation. They also accept a `GridWorld` directly through a thin Gymnasium adapter.
+Boundary actions are masked consistently during selection and learning. True terminations
+stop value bootstrapping; time-limit truncations do not.
 
-- **Advanced Environment Features**:
-  - Adding support for partially observable states (POMDP)
-  - Implementing more complex reward structures: Sparse rewards and Multi-objective rewards
-  - Adding support for continuous action spaces
-  - Implementing dynamic obstacles
-  - Custom reward shaping tools for different learning algorithms
+Advanced options are kept out of the first lessons: prioritized replay, soft target updates,
+learning-rate decay, and evaluation-based early stopping are opt-in. See the
+[experiment guide](docs/experiments.md) for their defaults and limitations.
 
-#### 2. Project Structure Improvements
-- Improving code modularity and reusability
-- Enhancing documentation with theory explanations
-- Streamlining configuration management
-- Adding new examples and tutorials
-- Implementing logging and experiment tracking
+## Optional: run and compare experiments
 
-#### 3. New RL Algorithm Implementations  
-- **Model-Based Methods**: Dyna-Q, Prioritized Sweeping, PILCO (Probabilistic Inference for Learning Control)
-- **Multi-Agent RL**: Independent Q-Learning, MADDPG (Multi-Agent DDPG)
-- **Hierarchical RL**: Options Framework, MAXQ
+```bash
+python -m pip install -e '.[experiments]'
+minrl train --config configs/cartpole_ppo.yaml --output runs/ppo-seed0
+minrl evaluate --run runs/ppo-seed0 --episodes 100
+minrl plot --run runs/ppo-seed0
+tensorboard --logdir runs
 
-#### 4. Visualization Enhancements
+# DQN, DQN + PER, PPO × five seeds × 100,000 environment steps
+minrl benchmark --config configs/benchmark.yaml --output runs/cartpole
+```
 
-### Contribution Guidelines
-1. Follow the existing code style and project structure
-2. Add comprehensive tests for new features
-3. Update documentation accordingly
-4. Ensure all tests pass before submitting PR
-5. Include example usage in docstrings
-6. Add relevant citations for implemented algorithms
+Every run saves its effective configuration, dependency versions, training CSV,
+evaluation JSON, TensorBoard events, and best/final checkpoints. Output folders must be new.
+Plotting reads saved results and exports SVG plus 300 DPI PNG without retraining.
 
-### Code Quality Requirements
-- Maintain clean, readable code
-- Include type hints
-- Follow PEP 8 guidelines
-- Achieve 100% test coverage for new code
-- Add detailed docstrings
+### Measured results
 
-For major changes, please open an issue first to discuss what you would like to change. This ensures your time is well spent and your contribution aligns with the project's goals.
+![Five-seed CartPole learning curves and final evaluation](figure/benchmark.png)
 
-## ✨ Acknowledgments
+CartPole-v1 · 100,000 environment steps per run · seeds 0–4 · CPU.
+Each final checkpoint is evaluated on 100 independent-seed episodes. Bands and ± values
+show one population standard deviation **across five seed means**, not confidence intervals.
 
-- Inspired by [simple_rl](https://github.com/david-abel/simple_rl), [CleanRL](https://github.com/vwxyzjn/cleanrl) and [RLCode](https://github.com/rlcode/reinforcement-learning)
+| Method | Final return, mean ± SD | Mean wall time per seed |
+| --- | ---: | ---: |
+| DQN | 492.28 ± 15.44 | 23.3 s |
+| DQN + PER | 476.40 ± 33.65 | 34.7 s |
+| PPO | 499.70 ± 0.56 | 29.1 s |
+| Random policy | 23.74 | — |
 
-- Special thanks to Professor Shiyu Zhao for his insightful course on the "Mathematical Foundations of Reinforcement Learning," which provided a solid foundation for my understanding of reinforcement learning. The course materials, including the textbook, PPTs, and code, can be found on his [GitHub repository](https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning), and the English [lecture videos](https://www.youtube.com/playlist?list=PLEhdbSEZZbDaFWPX4gehhwB9vJZJ1DNm8) and Chinese [lecture videos](https://space.bilibili.com/2044042934/lists/748665?type=season) are available online.
+All 15 runs completed; no seeds were dropped or tuned after inspection. PER did not improve
+the final mean in this small experiment, and intermediate scores were often non-monotonic.
+These are teaching results on one environment, not a general ranking of algorithms.
+See [the full protocol and seed-level results](docs/benchmark.md).
 
-## 📜 License
+## Small codebase, clear responsibilities
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```text
+src/minrl/
+  environment/grid_world.py   # deterministic dynamics + thin Gymnasium adapter
+  agents/                    # one algorithm per file; training and math together
+    common.py                # encoding, masks, small neural-network helpers
+    replay.py                # uniform replay and the optional PER extension
+  utils/visualization.py     # plots, independent of learning
+  experiments.py             # optional logging, evaluation and command-line runs
+examples/                    # short, runnable lessons
+tests/                       # hand-computed targets and end-to-end checks
+```
 
-## 🔗 Contact
+Begin with `train()` and then read `update()` / `train_step()` in the same file.
+`common.py` does not implement any learning rule. `experiments.py` is not required reading
+until you want to compare multiple runs.
 
-Created by: Yibin Liu  
+## Documentation and contributing
 
-Email: [yibin.leon.liu@outlook.com](yibin.leon.liu@outlook.com)  
+- [Learning guide and exercises](docs/learning-guide.md)
+- [DQN: replay and target values](docs/dqn.md)
+- [Actor-critic: one-step advantages](docs/docs_algorithms_actor_critic.md)
+- [PPO: rollout, GAE and clipped updates](docs/docs_algorithms_ppo.md)
+- [Experiments and checkpoint limitations](docs/experiments.md)
+- [Migration from 0.1](docs/migration.md)
+- [What was fixed](docs/changes.md)
+
+```bash
+python -m pip install -e '.[dev,experiments]'
+MPLBACKEND=Agg pytest --cov=minrl --cov-report=term-missing
+ruff check src tests examples
+python -m build
+```
+
+Prefer an explicit equation and a readable loop over an abstraction. Contributions should
+include a small correctness test, an example when useful, and documentation that describes
+the actual implementation. The CI workflow checks Python 3.10–3.12; local validation is
+performed on Python 3.11. Coverage numbers in reports are measured, not a promise of correctness.
+
+### Limits and future work
+
+This is a teaching library, not a general-purpose training framework. It currently uses
+single-environment CPU training, small MLPs, and discrete actions. It does not provide image
+policies, continuous control, vectorized collectors, exact checkpoint resumption, dynamic
+obstacles, multi-agent RL or curriculum learning. These are future directions, not implemented
+features. Monte Carlo estimates can be noisy and depend on visitation; excessively truncated
+episodes are reported and excluded, which can introduce selection bias.
+
+## References and acknowledgments
+
+- Mnih et al., [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/abs/1312.5602).
+- Schaul et al., [Prioritized Experience Replay](https://arxiv.org/abs/1511.05952).
+- Schulman et al., [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347).
+- [Gymnasium: handling time limits](https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/).
+- Thanks to Professor Shiyu Zhao's [Mathematical Foundations of Reinforcement Learning](https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning), and the educational work in [CleanRL](https://github.com/vwxyzjn/cleanrl), [simple_rl](https://github.com/david-abel/simple_rl) and [RLCode](https://github.com/rlcode/reinforcement-learning).
+
+Created by Yibin Liu · [MIT license](LICENSE).

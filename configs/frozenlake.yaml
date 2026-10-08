@@ -1,0 +1,12 @@
+algorithm: dqn
+env: FrozenLake-v1
+env_kwargs:
+  is_slippery: false
+seed: 0
+total_timesteps: 10000
+eval_interval: 1000
+final_eval_episodes: 20
+tensorboard: true
+agent:
+  learning_starts: 100
+  exploration_steps: 8000

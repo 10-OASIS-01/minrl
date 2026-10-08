@@ -1,0 +1,19 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync --all-extras --frozen
+      - run: uv run ruff check src tests examples
+      - run: uv run pytest --cov=minrl --cov-report=term-missing --cov-report=xml
+        env:
+          MPLBACKEND: Agg
+      - run: uv build

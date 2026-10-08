@@ -1,50 +1,51 @@
-# Proximal Policy Optimization (PPO) Implementation Guide
-Created by: 10-OASIS-01
-Date: 2025-02-09 04:58:42 UTC
+# PPO: collect first, update second
 
-## Overview
-PPO is a policy gradient method that uses a clipped surrogate objective to ensure
-stable training. This implementation includes:
-- Combined actor-critic architecture
-- Clipped surrogate objective
-- Value function estimation
-- Entropy bonus for exploration
+Read [`ppo.py`](../src/minrl/agents/ppo.py) in this order:
+`sample_action` → `train` → `compute_gae` → `update`.
+Run `python -m examples.ppo_example`.
 
-## Implementation Details
+The implementation uses **separate actor and critic networks**, each with two 64-unit tanh
+layers. The actor outputs logits, not pre-masked probabilities. A shared helper constructs
+the same masked categorical distribution during both sampling and optimization.
 
-### Network Architecture
-- Shared feature extractor
-- Policy head (actor) with softmax output
-- Value head (critic) with scalar output
+## Phase 1: collect a rollout
 
-### Key Components
-1. **PPONetwork**: Combined actor-critic neural network
-2. **PPOMemory**: Buffer for storing transitions
-3. **PPOAgent**: Main agent implementation with PPO logic
+For each step, save the encoded observation, action, reward, old value, next observation's
+value, old log probability, termination flag, truncation flag and action mask.
+Do not update the policy between these samples. At `rollout_steps`, stop collecting and learn.
+The final partial rollout is also used when the training budget ends.
 
-### Training Process
-1. Collect experiences using current policy
-2. Compute advantages and returns
-3. Perform multiple epochs of updates with clipped objective
-4. Include value loss and entropy bonus
+## Phase 2: compute advantages and returns
 
-## Usage Example
-```python
-from src.environment import GridWorld
-from src.agents import PPOAgent
+```text
+delta[t] = reward[t] + gamma * (1 - terminated[t]) * next_value[t] - value[t]
+adv[t]   = delta[t] + gamma * lambda * same_episode[t] * adv[t + 1]
+return[t] = adv[t] + value[t]
+```
 
-# Create environment and agent
-env = GridWorld(size=4)
-agent = PPOAgent(
-    env,
-    learning_rate=0.0003,
-    clip_ratio=0.2,
-    value_coef=0.5,
-    entropy_coef=0.01
-)
+`same_episode` is false for termination **or** truncation. At a time limit, `next_value`
+comes from the final observation, not the reset state. At a rollout boundary, the recursion
+stops, but the TD residual still includes the next state's value.
 
-# Train the agent
-rewards, lengths = agent.train(n_episodes=1000)
+Normalize advantages using population standard deviation. For a single sample, skip
+normalization: its variance is zero and centering would remove the learning signal.
 
-# Get learned policy
-policy = agent.get_optimal_policy()
+## Phase 3: optimize, then discard the rollout
+
+```text
+ratio       = exp(new_log_prob - old_log_prob)
+unclipped   = ratio * advantage
+clipped     = clamp(ratio, 1 - clip_ratio, 1 + clip_ratio) * advantage
+policy_loss = -mean(min(unclipped, clipped))
+```
+
+The critic regresses to the fixed rollout returns, using the maximum of unclipped and
+clipped squared value errors. Positive entropy is logged; its coefficient is subtracted
+from the total loss to encourage exploration. Shuffle the rollout into minibatches and
+repeat for `num_epochs`, then clear it. Old rollouts are not a replay buffer.
+
+The default clip ratio is 0.2, GAE lambda 0.95, gamma 0.99, actor learning rate 0.0003,
+value-loss coefficient 0.5, entropy coefficient 0.01 and maximum gradient norm 0.5.
+Approximate KL is logged as a diagnostic; this implementation does not stop updates by KL.
+
+Reference: [Schulman et al., Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347).

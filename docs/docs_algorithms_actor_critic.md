@@ -1,44 +1,34 @@
-# Actor-Critic Implementation Guide
-Created by: 10-OASIS-01
-Date: 2025-02-09 04:56:06 UTC
+# Actor-critic: learn a policy with a one-step critic
 
-## Overview
-The Actor-Critic algorithm combines policy gradient methods with value function approximation,
-providing a hybrid approach to reinforcement learning. This implementation uses two neural
-networks:
-- Actor: learns to select actions by outputting action probabilities
-- Critic: learns to evaluate states by estimating their values
+Read [`actor_critic.py`](../src/minrl/agents/actor_critic.py) and run
+`python -m examples.actor_critic_example`.
 
-## Implementation Details
+The actor outputs action logits; the critic outputs one state value. They are separate
+two-layer MLPs, optimized together. The policy distribution masks exactly the same actions
+when sampling and when computing the update.
 
-### Networks Architecture
-- **Actor Network**: Maps states to action probabilities using softmax output
-- **Critic Network**: Maps states to scalar value estimates
+```text
+target      = reward + gamma * (1 - terminated) * V(next_state)
+advantage   = target - V(state)
+actor_loss  = -log pi(action | state) * stop_gradient(advantage)
+critic_loss = advantage ** 2
+loss        = actor_loss + 0.5 * critic_loss - entropy_coef * entropy
+```
 
-### Learning Process
-1. Actor selects actions using learned policy
-2. Critic evaluates states and computes TD error
-3. TD error is used to:
-   - Update critic network (minimize TD error)
-   - Update actor network (policy gradient with TD error as advantage)
+`target` is calculated without gradients. The actor receives a detached advantage: it should
+change action probabilities, not manipulate the critic to change its learning signal.
+Positive advantage reinforces an action; negative advantage discourages it.
 
-### Key Features
-- Handles invalid actions through action masking
-- Provides detailed training statistics
-- Supports hyperparameter tuning
-- Includes policy extraction functionality
+The loop is intentionally online: observe → sample → step → update → repeat. There is no
+replay buffer or rollout reuse. A time limit resets the environment but still bootstraps
+from its final observation. Learning-rate decay is optional and off by default.
 
-## Usage Example
 ```python
-from src.environment import GridWorld
-from src.agents import ActorCriticAgent
+from minrl import GridWorld, ActorCriticAgent
+from minrl.agents.common import seed_everything
 
-# Create environment and agent
-env = GridWorld(size=4)
-agent = ActorCriticAgent(env)
-
-# Train the agent
-rewards, lengths = agent.train(n_episodes=1000)
-
-# Get learned policy
+seed_everything(0)
+agent = ActorCriticAgent(GridWorld())
+agent.train(total_timesteps=5000, seed=0)
 policy = agent.get_optimal_policy()
+```

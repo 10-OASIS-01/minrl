@@ -1,0 +1,18 @@
+algorithm: dqn
+env: CartPole-v1
+seed: 0
+total_timesteps: 100000
+eval_interval: 5000
+eval_episodes: 10
+final_eval_episodes: 100
+tensorboard: true
+agent:
+  hidden_dim: 64
+  learning_rate: 0.001
+  buffer_size: 50000
+  batch_size: 64
+  learning_starts: 1000
+  train_freq: 4
+  target_update_freq: 500
+  exploration_steps: 20000
+  min_epsilon: 0.05
